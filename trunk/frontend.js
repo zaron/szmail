@@ -41,12 +41,7 @@ function gui_addMail(mail)
 			 + mail.size
 			 + '</td></tr>');
 	el.click(function(event) {
-		var view = $('#view_mail');
-		if (activeView != view) {
-			activeView.hide();
-			activeView = view;
-			activeView.show();
-		}
+		setActiveView($('#view_mail'));
 	});
 	el.appendTo($('#mail_table tbody'));
 }
@@ -60,18 +55,21 @@ function gui_addFolder(folder, where) {
 	
 	// Click-function for Folders
 	el.click(function(event) {
-		var view = $('#view_folders');
-		if (activeView != view) {
-			activeView.hide();
-			activeView = view;
-			activeView.show();
-		}
+		setActiveView($('#view_folders'));
 		if (activeFolder)
 			activeFolder.removeClass('active');
 		el.addClass('active');
 		activeFolder = el;
 	});
 };
+
+function setActiveView(view) {
+	if (activeView != view) {
+		activeView.hide();
+		activeView = view;
+		activeView.show();
+	}
+}
 
 function startFrontend() {
 	activeFolder = $('#navigation li.active');
