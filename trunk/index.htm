@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>szMail</title>
+<link rel="stylesheet" href="css/layout.css"></link>
+<!--<link rel="stylesheet" href="css/jqplot.css"></link>-->
+<script type="text/javascript" src="lib/yabble.js"></script>
+<script type="text/javascript" src="lib/jquery.js"></script>
+<!-- 
+<script type="text/javascript" src="lib/excanvas.min.js"></script>
+
+<script type="text/javascript" src="lib/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="lib/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script type="text/javascript" src="lib/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="lib/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script type="text/javascript" src="lib/plugins/jqplot.highlighter.min.js"></script>
+ -->
+
+
+<script type="text/javascript" src="frontend.js"></script>
+
+
+<script type="text/javascript">
+
+require.reset();
+//require.useScriptTags(); // for local testing only
+require.setModuleRoot('modules');
+require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
+	var MailBox = require('mailbox').MailBox;
+	var mb = new MailBox( {});
+	mb.getFolders( {
+		'success' : function(folders) {
+			for ( var id in folders) {
+				gui_addFolder(folders[id], '#folders .n.separator');
+			}
+		},
+		'error' : function(error) {
+		}
+	});
+
+	mb.getMails( {
+		'success' : function(mails) {
+			for ( var id in mails) {
+				gui_addMail(mails[id]);
+			}
+		},
+		'error' : function(error) {
+		}
+	});
+});
+
+
+	function doIframe() {
+		o = document.getElementsByTagName('iframe');
+		for (i = 0; i < o.length; i++) {
+			setHeight(o[i]);
+			addEvent(o[i], 'load', doIframe);
+		}
+	}
+
+	function setHeight(e) {
+		if (e.contentDocument) {
+			e.height = e.contentDocument.body.offsetHeight + 35;
+		} else {
+			e.height = e.contentWindow.document.body.scrollHeight;
+		}
+	}
+
+	function addEvent(obj, evType, fn) {
+		if (obj.addEventListener) {
+			obj.addEventListener(evType, fn, false);
+			return true;
+		} else if (obj.attachEvent) {
+			var r = obj.attachEvent("on" + evType, fn);
+			return r;
+		} else {
+			return false;
+		}
+	}
+
+	$(document).ready(
+			function() {
+				$('.content').hide();
+				activeView = $('#view_mail');
+				activeView.show();
+				startFrontend();
+
+				doIframe();
+
+				var line1 = [ [ '1-May-08', 3 ], [ '2-May-08', 0 ],
+						[ '3-May-08', 0 ], [ '4-May-08', 7 ],
+						[ '5-May-08', 4 ], [ '6-May-08', 0 ],
+						[ '7-May-08', 4 ], [ '8-May-08', 2 ],
+						[ '9-May-08', 3 ], [ '10-May-08', 0 ],
+						[ '11-May-08', 0 ], [ '12-May-08', 7 ],
+						[ '13-May-08', 4 ], [ '14-May-08', 0 ],
+						[ '15-May-08', 4 ], [ '16-May-08', 2 ],
+						[ '17-May-08', 3 ], [ '18-May-08', 0 ],
+						[ '19-May-08', 0 ], [ '20-May-08', 7 ],
+						[ '21-May-08', 4 ], [ '22-May-08', 0 ],
+						[ '23-May-08', 4 ], [ '24-May-08', 2 ],
+						[ '25-May-08', 3 ], [ '26-May-08', 0 ],
+						[ '27-May-08', 0 ], [ '28-May-08', 7 ],
+						[ '29-May-08', 4 ], [ '30-May-08', 0 ],
+						[ '31-May-08', 4 ] ];
+				plot1 = $.jqplot('history_plot', [ line1 ], {
+					gridPadding : {
+						right : 7
+					},
+					axes : {
+						xaxis : {
+							renderer : $.jqplot.DateAxisRenderer,
+							rendererOptions : {
+								tickRenderer : $.jqplot.CanvasAxisTickRenderer
+							},
+							autoscale : true,
+							min : 'May 1, 2008',
+							tickOptions : {
+								formatString : '%b %#d',
+								fontSize : '11px',
+								fontFamily : 'Tahoma',
+								angle : 0
+							}
+						},
+						yaxis : {
+							min : 0,
+							rendererOptions : {
+								tickRenderer : $.jqplot.CanvasAxisTickRenderer
+							},
+							tickOptions : {
+								formatString : '%d',
+								fontSize : '11px',
+								fontFamily : 'Tahoma',
+								angle : 0,
+								showGridline : false
+							}
+						}
+					},
+					grid : {
+						gridLineColor : '#ddd',
+						borderColor : '#fff',
+						borderWidth : 1.0,
+						shadow : false,
+						borderWidth : 0.0
+					},
+					seriesDefaults : {
+						shadow : false,
+						markerOptions : {
+							size : 6
+						}
+					},
+					highlighter : {
+						show : true,
+						sizeAdjust : 7.5
+					},
+					cursor : {
+						show : false
+					}
+				});
+
+			});
+</script>
+</head>
+<body>
+
+      <div id="header">
+            <div id="logo"><h1><a href="#">szMail</a></h1>
+            	<div id="headerbar">Willkommen, <a href="">Eric Barmeyer</a> | <a href="">Accounteinstellungen</a> | <a href="" class="logout">Abmelden</a></div>
+            </div>
+        </div>
+        <div id="wrapper">
+
+            <div id="navigation">
+                <div id="inbox_navigation">
+                    <ul id="special_folders">
+                    	
+                        <li class="n separator"></li>
+                    </ul>
+
+                    <h3>Ordner</h3>
+                    <ul id="folders">
+						
+                        <li class="n separator"></li>
+                        <li class="n"><a class="add_folder">Ordner hinzuf&uuml;gen</a></li>
+                        <li class="n"><a class="edit_folder">Ordner verwalten</a></li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <div id="content">
+                <div id="universalbar">
+                    <div id="reload_button"><a href="#"></a></div>
+                    <div id="search"><a class="bookmark" href="#"></a><a class="go" href="#"></a><div id="searchbar"><div id="suggest">
+                                <ul>
+                                    <li class="search_mails"><a>Nachrichten mit diesem Absender suchen<br/><span class="subject">Von: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                    <li class="new_mail"><a>Neue Nachricht verfassen<br/><span class="subject">An: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                </ul>
+                            </div><input id="searchbox" autocomplete="off" type="text" name="search" /></div></div>
+                </div>
+                
+                <!--<div id="notifications">
+                    <div class="notification"><p class="ok">Everythings fine.</p></div>
+                    <div class="notification"><p class="warning">Quota is at 89%.</p></div>
+                </div>-->
+                
+                
+                <div id="content_wrapper" class="content_wrapper">
+<!-- -->
+<div class="content" id="view_mail">
+    <h2>Betreff der eMail</h2>
+    <div class="panel">
+		<div class="right"><div class="jqPlot" id="history_plot" style="height:89px; width:366px;"></div>
+	    </div>
+	    <div class="information left">
+	        <p class="received"><span class="header">Sent: </span><span>Name des Absenders</span></p>
+	        <p class="from"><span class="header">From: </span><span class="user_male">eMail-Adresse@des.Absenders</span></p>
+	        <p class="to"><span class="header">To: </span><span class="user_male">eMail-Adresse@der.Empfaenger</span></p>
+	        <p class="cc"><span class="header">CC: </span>eMail-Adresse@der.Empfaenger</p>
+	        <p class="bcc"><span class="header">BCC: </span>eMail-Adresse@der.Empfaenger</p>
+	    </div>
+    </div>
+    <div class="menu">
+        <div class="left"><span class="button"><a class="reply" href="#">Antworten</a></span><span class="button"><a class="reply_all" href="#">Allen Antworten</a></span><span class="button"><a class="forward" href="#">Weiterleiten</a></span></div>
+        <div class="right"><span class="button"><a class="mail_history" href="#">Verlauf</a></span><span class="button"><a class="add_note" href="#">Notiz hinzuf&uuml;gen</a></span></div>
+    </div>
+    <div class="mail_content">
+    	<div class="view_switcher"><span class="button left"><a class="view_text">Text</a></span><span class="button right"><a class="view_html active">HTML</a></span></div>
+        <div class="htmlview">
+        <iframe id="mail_frame" src="email/html_email_basic_template.html" frameborder="0" width="100%" height="450"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="content" id="view_folders">
+<div class="menu noborder">
+<div class="left">Inbox</div>
+<div class="right pagination"></div>
+</div>
+<table id="mail_table" cellspacing="0">
+
+	<thead>
+		<tr>
+			<th scope="col" class="checkbox"><img
+				src="/images/ui-check-boxes.png" alt="" /></th>
+			<th scope="col" class="attachment"><img
+				src="/images/paper-clip.png" alt="" /><a class="order"></a></th>
+			<th scope="col" class="subject">Betreff<a class="order"></a></th>
+			<th scope="col" class="from">Absender<a class="order"></a></th>
+			<th scope="col" class="date">Datum<a class="order"></a></th>
+			<th scope="col" class="size">Gr&ouml;&szlig;e<a class="order"></a></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	</tbody>
+
+</table>
+
+<div class="menu noborder">
+<div class="left"></div>
+<div class="right pagination"></div>
+</div>
+</div>
+
+
+
+</div>
+            </div>
+			<div class="clear"></div>
+        </div>
+        <div id="footer">powered by szMail</div>
+</body>
+
+</html>
