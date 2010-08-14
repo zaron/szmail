@@ -150,14 +150,15 @@ var MailBox = MailBox || function(options) {
 			request.headers["Content-Length"] = 567;
 			request.write('getMails');
 			request.on("success", function(response) {
-				response = ["Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto","Fu","Fara","Peter","Otto"];
+				response = stub.getMailsResponse;
 				var mails = [];
-				for(var id in response) {
+				for(var id in response.mails) {
+					var mail = response.mails[id];
 					mails.push(new Mail({
-						from : response[id],
-						id : id,
-						date : '12. Mai 2010',
-						subject : 'Wir kaufen ein Fahrrad'
+						from : mail.from,
+						id : mail.id,
+						date : mail.date,
+						subject : mail.subject
 					}));
 				}
 				events.success(mails);

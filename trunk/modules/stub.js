@@ -61,12 +61,27 @@ exports.getFoldersResponse = {
 		"unread" : 0,
 		"folders" : []
 	} ]
-}
+};
+
+exports.getMailsResponse = {
+	"mails" : [ {
+		"id" : 1,
+		"from" : "Enrico Grot",
+		"date" : "12. Mail 2010",
+		"subject" : "Fahrraeder sind doof"
+	}, {
+		"id" : 2,
+		"from" : "Penrico Grot",
+		"date" : "11. Mail 2010",
+		"subject" : "SMokE thAt ShiT!"
+	} ]
+};
 
 exports.getMailResponse = {
-	"id" : "0", // internal unique identifier, MUST NOT refer to the uuid in IMAP  
+	"id" : "0", // internal unique identifier, MUST NOT refer to the uuid in
+				// IMAP
 	"subject" : "Subject Text", // MUST be UTF-8 encoded and MUST be escaped.
-	"date" : "UTC Time", // MUST be formatted according to RFCxyz... 
+	"date" : "UTC Time", // MUST be formatted according to RFCxyz...
 	"from" : {
 		"id" : "0", // internal contact id (focus on later implementation?)
 		"name" : "",
@@ -118,4 +133,4 @@ exports.getMailResponse = {
 	"body" : "" // MUST be escaped and MUST be UTF-8 encoded.
 };
 
-//}},[]);
+// }},[]);
