@@ -5,22 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>szMail</title>
 <link rel="stylesheet" href="css/layout.css"></link>
-<!--<link rel="stylesheet" href="css/jqplot.css"></link>-->
+
 <script type="text/javascript" src="lib/yabble.js"></script>
 <script type="text/javascript" src="lib/jquery.js"></script>
-<!-- 
-<script type="text/javascript" src="lib/excanvas.min.js"></script>
-
-<script type="text/javascript" src="lib/jquery.jqplot.min.js"></script>
-<script type="text/javascript" src="lib/plugins/jqplot.dateAxisRenderer.min.js"></script>
-<script type="text/javascript" src="lib/plugins/jqplot.canvasTextRenderer.min.js"></script>
-<script type="text/javascript" src="lib/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
-<script type="text/javascript" src="lib/plugins/jqplot.highlighter.min.js"></script>
- -->
-
-
 <script type="text/javascript" src="frontend.js"></script>
-
 
 <script type="text/javascript">
 
@@ -80,87 +68,14 @@ require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
 		}
 	}
 
-	$(document).ready(
-			function() {
-				$('.content').hide();
-				activeView = $('#view_mail');
-				activeView.show();
-				startFrontend();
+$(document).ready(function() {
+	$('.content').hide();
+	activeView = $('#view_mail');
+	activeView.show();
+	startFrontend();
+	doIframe();
+});
 
-				doIframe();
-/*
-				var line1 = [ [ '1-May-08', 3 ], [ '2-May-08', 0 ],
-						[ '3-May-08', 0 ], [ '4-May-08', 7 ],
-						[ '5-May-08', 4 ], [ '6-May-08', 0 ],
-						[ '7-May-08', 4 ], [ '8-May-08', 2 ],
-						[ '9-May-08', 3 ], [ '10-May-08', 0 ],
-						[ '11-May-08', 0 ], [ '12-May-08', 7 ],
-						[ '13-May-08', 4 ], [ '14-May-08', 0 ],
-						[ '15-May-08', 4 ], [ '16-May-08', 2 ],
-						[ '17-May-08', 3 ], [ '18-May-08', 0 ],
-						[ '19-May-08', 0 ], [ '20-May-08', 7 ],
-						[ '21-May-08', 4 ], [ '22-May-08', 0 ],
-						[ '23-May-08', 4 ], [ '24-May-08', 2 ],
-						[ '25-May-08', 3 ], [ '26-May-08', 0 ],
-						[ '27-May-08', 0 ], [ '28-May-08', 7 ],
-						[ '29-May-08', 4 ], [ '30-May-08', 0 ],
-						[ '31-May-08', 4 ] ];
-				plot1 = $.jqplot('history_plot', [ line1 ], {
-					gridPadding : {
-						right : 7
-					},
-					axes : {
-						xaxis : {
-							renderer : $.jqplot.DateAxisRenderer,
-							rendererOptions : {
-								tickRenderer : $.jqplot.CanvasAxisTickRenderer
-							},
-							autoscale : true,
-							min : 'May 1, 2008',
-							tickOptions : {
-								formatString : '%b %#d',
-								fontSize : '11px',
-								fontFamily : 'Tahoma',
-								angle : 0
-							}
-						},
-						yaxis : {
-							min : 0,
-							rendererOptions : {
-								tickRenderer : $.jqplot.CanvasAxisTickRenderer
-							},
-							tickOptions : {
-								formatString : '%d',
-								fontSize : '11px',
-								fontFamily : 'Tahoma',
-								angle : 0,
-								showGridline : false
-							}
-						}
-					},
-					grid : {
-						gridLineColor : '#ddd',
-						borderColor : '#fff',
-						borderWidth : 1.0,
-						shadow : false,
-						borderWidth : 0.0
-					},
-					seriesDefaults : {
-						shadow : false,
-						markerOptions : {
-							size : 6
-						}
-					},
-					highlighter : {
-						show : true,
-						sizeAdjust : 7.5
-					},
-					cursor : {
-						show : false
-					}
-				});
-*/
-			});
 </script>
 </head>
 <body>

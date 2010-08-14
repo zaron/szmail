@@ -5,60 +5,60 @@ exports.getFoldersResponse = {
 		"id" : "0",
 		"name" : "Posteingang",
 		"type" : "INBOX",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 12543,
+		"unread" : 3,
 		"folders" : []
 	}, {
 		"id" : "1",
 		"name" : "Ent&uuml;rfe",
 		"type" : "DRAFTS",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 756,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "2",
 		"name" : "Gesendet",
 		"type" : "SENT",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 4612,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "3",
 		"name" : "Spam",
 		"type" : "SPAM",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 1152,
+		"unread" : 7,
 		"folders" : []
 	}, {
 		"id" : "4",
 		"name" : "Papierkorb",
 		"type" : "TRASH",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 53,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "5",
 		"name" : "Foldername",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 11,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "6",
 		"name" : "Foldername",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 24,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "7",
 		"name" : "Foldername",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 45,
+		"unread" : 0,
 		"folders" : []
 	}, {
 		"id" : "8",
 		"name" : "Foldername",
-		"mails" : 1234,
-		"unread" : 12,
+		"mails" : 7,
+		"unread" : 0,
 		"folders" : []
 	} ]
 }

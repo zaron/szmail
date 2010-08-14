@@ -115,7 +115,7 @@ var MailBox = MailBox || function(options) {
 	 * @param events
 	 * @returns
 	 */
-	this.getFolders = function(events) {
+	this.getFolders = function(events, contraints) {
 		net.createHTTPRequest(function(request){
 			request.headers["Content-Length"] = 1234;
 			request.write("getFolders"); // 
@@ -145,7 +145,7 @@ var MailBox = MailBox || function(options) {
 	 * @param events
 	 * @returns
 	 */
-	this.getMails = function(events) {
+	this.getMails = function(events, contraints) {
 		net.createHTTPRequest(function(request){
 			request.headers["Content-Length"] = 567;
 			request.write('getMails');
@@ -163,6 +163,13 @@ var MailBox = MailBox || function(options) {
 				events.success(mails);
 			});
 			request.on("error", events.error || noop);
+		}).send(options.endpoint);
+	};
+	
+	
+	this.getConfiguration = function(events) {
+		net.createHTTPRequest(function(request){
+			
 		}).send(options.endpoint);
 	};
 	
