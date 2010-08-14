@@ -1,5 +1,6 @@
 //require.define({"mailbox": function(require, exports, module) {
 
+
 var net = require('net');
 var stub = require('stub');
 
@@ -85,6 +86,11 @@ var Mail = function(options) {
 	/**
 	 * 
 	 */
+	this.attachments = options.attachments || null;
+	
+	/**
+	 * 
+	 */
 	this.size = options.size || 0;
 };
 
@@ -95,6 +101,7 @@ var Mail = function(options) {
  */
 var MailBox = MailBox || function(options) {
 	
+	log("New MailBox object created.");
 	/**
 	 * 
 	 */
@@ -157,6 +164,7 @@ var MailBox = MailBox || function(options) {
 					mails.push(new Mail({
 						from : mail.from,
 						id : mail.id,
+						attachments : mail.attachments, 
 						date : mail.date,
 						subject : mail.subject
 					}));
