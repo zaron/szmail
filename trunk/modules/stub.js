@@ -10,7 +10,7 @@ exports.getFoldersResponse = {
 		"folders" : []
 	}, {
 		"id" : "1",
-		"name" : "Ent&uuml;rfe",
+		"name" : "Entw&uuml;rfe",
 		"type" : "DRAFTS",
 		"mails" : 756,
 		"unread" : 0,
@@ -68,6 +68,9 @@ exports.getMailsResponse = {
 		"id" : 1,
 		"from" : "Enrico Grot",
 		"date" : "12. Mail 2010",
+		"attachments" : [{
+			"name" : 'foo'
+		}],
 		"subject" : "Fahrraeder sind doof"
 	}, {
 		"id" : 2,

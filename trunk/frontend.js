@@ -2,6 +2,11 @@ var activeFolder;
 
 var activeView;
 
+function log(msg)
+{
+	$('#debug').append(msg+"<br/>");
+}
+
 function gui_showMail(mail)
 {
 	var I18n = {
@@ -28,9 +33,10 @@ function gui_showMail(mail)
 
 function gui_addMail(mail)
 {
+	log("gui_addMail called.");
 	var el = $('<tr><td class="checkbox"><div class="checkbox">'
 			 + '<input type="checkbox" name="" /></div></td>'
-			 + '<td class="attachment"><a class="'+((mail.attachments !== undefined)?'':'no')+'attachment">'
+			 + '<td class="attachment"><a class="'+((mail.attachments != null)?'':'no')+'attachment">'
 			 + '</a></td><td class="subject"><b><a href="#!/?m='+ mail.id +'"><i>'
 			 + mail.subject
 			 + '</i></a></b></td><td class="from"><a class="">'
@@ -41,6 +47,7 @@ function gui_addMail(mail)
 			 + mail.size
 			 + '</td></tr>');
 	el.click(function(event) {
+		log("mail clicked.");
 		event.preventDefault();
 		setActiveView($('#view_mail'));
 		
@@ -50,6 +57,7 @@ function gui_addMail(mail)
 
 
 function gui_addFolder(folder, where) {
+	log("gui_addFolder called.");
 	if(folder.type != '') where = "#special_folders .n.separator"; 
 	
 	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/?ai=' + folder.id + '">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
@@ -57,6 +65,7 @@ function gui_addFolder(folder, where) {
 	
 	// Click-function for Folders
 	el.click(function(event) {
+		log("folder '"+folder.name+"' clicked.");
 		event.preventDefault();
 		setActiveView($('#view_folders'));
 		if (activeFolder)
