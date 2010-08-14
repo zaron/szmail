@@ -50,7 +50,7 @@ function gui_addMail(mail)
 function gui_addFolder(folder, where) {
 	if(folder.type != '') where = "#special_folders .n.separator"; 
 	
-	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/?ai=' + folder.id + '">' + folder.name + ' ('+ folder.unread +')</a><span><a class="edit"></a><a class="delete"></a></span></li>');
+	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/?ai=' + folder.id + '">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
 	el.insertBefore(where);
 	
 	// Click-function for Folders
