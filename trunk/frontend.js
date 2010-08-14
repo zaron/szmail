@@ -67,7 +67,7 @@ function gui_addFolder(folder, where) {
 	el.click(function(event) {
 		log("folder '"+folder.name+"' clicked.");
 		if(folder.name == "Spam") {
-			log("<img src=\"http://bit.ly/aQv1mK\" />");
+			log("<img src=\"http://bit.ly/98W7ps\" />");
 		}
 		event.preventDefault();
 		setActiveView($('#view_folders'));
