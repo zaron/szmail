@@ -30,8 +30,8 @@ function gui_addMail(mail)
 {
 	var el = $('<tr><td class="checkbox"><div class="checkbox">'
 			 + '<input type="checkbox" name="" /></div></td>'
-			 + '<td class="attachment"><a class="noattachment">'
-			 + '</a></td><td class="subject"><b><a href=""><i>'
+			 + '<td class="attachment"><a class="'+((mail.attachments !== undefined)?'':'no')+'attachment">'
+			 + '</a></td><td class="subject"><b><a href="#!/?m='+ mail.id +'"><i>'
 			 + mail.subject
 			 + '</i></a></b></td><td class="from"><a class="">'
 			 + mail.from
@@ -41,7 +41,9 @@ function gui_addMail(mail)
 			 + mail.size
 			 + '</td></tr>');
 	el.click(function(event) {
+		event.preventDefault();
 		setActiveView($('#view_mail'));
+		
 	});
 	el.appendTo($('#mail_table tbody'));
 }
@@ -55,6 +57,7 @@ function gui_addFolder(folder, where) {
 	
 	// Click-function for Folders
 	el.click(function(event) {
+		event.preventDefault();
 		setActiveView($('#view_folders'));
 		if (activeFolder)
 			activeFolder.removeClass('active');
