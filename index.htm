@@ -17,7 +17,7 @@ require.reset();
 require.setModuleRoot('modules');
 require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
 	var MailBox = require('mailbox').MailBox;
-	var mb = new MailBox( {});
+	var mb = new MailBox({"endpoint": '/'});
 	mb.getFolders( {
 		'success' : function(folders) {
 			for ( var id in folders) {
@@ -71,7 +71,7 @@ require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
 $(document).ready(function() {
 	$(window).bind('hashchange', function(event) {
 		log('hashchange event fired.');
-		
+		HashNav.update();
 	});
 	$('.content').hide();
 	activeView = $('#view_mail');

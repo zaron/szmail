@@ -2,7 +2,20 @@
 
 // Empty function.
 var noop = function() {};
-	
+
+function createXMLHttpRequest() {
+	try {
+		return new XMLHttpRequest();
+	} catch (e) {
+	}
+	try {
+		return new ActiveXObject("Msxml2.XMLHTTP");
+	} catch (e) {
+	}
+	alert("XMLHttpRequest not supported");
+	return null;
+}
+
 /**
  * 
  * @param url
@@ -60,8 +73,17 @@ var HTTPRequestHandler = function(url, options) {
      */
 	this.send = function() {
 		// TODO: Use an engine to write to a HTTP stream (XHR in browsers)
-		var response = "";
-		events["success"](response);
+		log('send called.');
+		var xhr = createXMLHttpRequest();
+		log('xhr created ('+ options.method +','+ url +')');
+		xhr.open(options.method, url, true);
+		log('xhr open.');
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState != 4) { return; } // TODO: Error handling
+			var response = eval('('+xhr.responseText+')');
+			events["success"](response);
+		};
+		xhr.send(null);
 	};
 };
 

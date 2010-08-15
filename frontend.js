@@ -4,8 +4,24 @@ var activeView;
 
 function log(msg)
 {
-	$('#debug').prepend(msg+"<br/>");
+	$('#debug').prepend(msg+'<br/>');
 }
+
+var HashNav = {
+	map : {},
+	update : function(){
+		var hash = location.hash;
+		if(!hash.match(/#!\/?/)) return; // TODO: error handling
+		hash = hash.substr(4);
+		/*
+		var kv = hash.split('&');
+		for(var i = 0, i < kv.length, i++)
+		{
+			
+		}*/
+	}
+};
+
 
 function gui_showMail(mail)
 {
@@ -30,6 +46,10 @@ function gui_showMail(mail)
 
 }
 
+var GUIFolder = function(options){
+	this.folder = options.folder || [];
+	this.mails = options.mails || [];
+};
 
 function gui_addMail(mail)
 {
@@ -55,18 +75,18 @@ function gui_addMail(mail)
 	el.appendTo($('#mail_table tbody'));
 }
 
-
+var folders = [];
 function gui_addFolder(folder, where) {
 	log("gui_addFolder called.");
 	if(folder.type != '') where = "#special_folders .n.separator"; 
 	
 	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/?ai=' + folder.id + '">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
+	folders[folder.id] = el;
 	el.insertBefore(where);
 	
 	// Click-function for Folders
 	el.click(function(event) {
 		log("folder '"+folder.name+"' clicked.");
-		event.preventDefault();
 		setActiveView($('#view_folders'));
 		if (activeFolder)
 			activeFolder.removeClass('active');

@@ -1,0 +1,62 @@
+{
+	"folders" : [ {
+		"id" : "0",
+		"name" : "Posteingang",
+		"type" : "INBOX",
+		"mails" : 12543,
+		"unread" : 3,
+		"folders" : []
+	}, {
+		"id" : "1",
+		"name" : "Entw&uuml;rfe",
+		"type" : "DRAFTS",
+		"mails" : 756,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "2",
+		"name" : "Gesendet",
+		"type" : "SENT",
+		"mails" : 4612,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "3",
+		"name" : "Spam",
+		"type" : "SPAM",
+		"mails" : 1152,
+		"unread" : 7,
+		"folders" : []
+	}, {
+		"id" : "4",
+		"name" : "Papierkorb",
+		"type" : "TRASH",
+		"mails" : 53,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "5",
+		"name" : "Foldername",
+		"mails" : 11,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "6",
+		"name" : "Foldername",
+		"mails" : 24,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "7",
+		"name" : "Foldername",
+		"mails" : 45,
+		"unread" : 0,
+		"folders" : []
+	}, {
+		"id" : "8",
+		"name" : "Foldername",
+		"mails" : 7,
+		"unread" : 0,
+		"folders" : []
+	} ]
+}
