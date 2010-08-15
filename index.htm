@@ -69,11 +69,16 @@ require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
 	}
 
 $(document).ready(function() {
+	$(window).bind('hashchange', function(event) {
+		log('hashchange event fired.');
+		
+	});
 	$('.content').hide();
 	activeView = $('#view_mail');
 	activeView.show();
 	startFrontend();
 	doIframe();
+	$(window).trigger('hashchange');
 });
 
 </script>
@@ -102,7 +107,6 @@ $(document).ready(function() {
                         <li class="n"><a class="add_folder">Ordner hinzuf&uuml;gen</a></li>
                         <li class="n"><a class="edit_folder">Ordner verwalten</a></li>
                     </ul>
-					<img src="http://www.kunstundmarkt.com/ameise.gif" style="margin-top:-100px;" />
                 </div>
             </div>
 
@@ -145,7 +149,7 @@ $(document).ready(function() {
         <div class="right"><span class="button"><a class="mail_history" href="#">Verlauf</a></span><span class="button"><a class="add_note" href="#">Notiz hinzuf&uuml;gen</a></span></div>
     </div>
     <div class="mail_content">
-    	<div class="view_switcher"><span class="button left"><a class="view_text">Text</a></span><span class="button right"><a class="view_html active">HTML</a></span></div>
+    	<div class="view_switcher"><div><span class="button left"><a class="view_text">Text</a></span><span class="button right"><a class="view_html active">HTML</a></span></div></div>
         <div class="htmlview">
         <iframe id="mail_frame" src="email/html_email_basic_template.html" frameborder="0" width="100%" height="450"></iframe>
         </div>

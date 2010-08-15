@@ -301,21 +301,27 @@ span.button
 	color: #888;
 }
 
-.view_switcher
-{
-	position:absolute;
-	right: 47px; // fix this
-	text-align: right;
-	float: right;
-	z-index: 1;
-	padding: 4px 4px 0 0;
+.view_switcher span {
 	opacity: 0.6;
 }
-
-.view_switcher:hover
-{
+.view_switcher span:hover {
 	opacity: 1.0;
 }
+
+.view_switcher div {
+	position: absolute;
+	z-index: 1;
+	right: 0;
+	top: 3px;
+	width: 100%;
+	text-align: right;
+}
+
+.view_switcher
+{
+	position: relative;
+}
+
 
 .button.left {
 	margin: 0 0 0 3px;
