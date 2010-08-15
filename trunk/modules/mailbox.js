@@ -101,7 +101,7 @@ var Mail = function(options) {
  */
 var MailBox = MailBox || function(options) {
 	
-	log("New MailBox object created.");
+	log("New MailBox object created. ('"+options.endpoint+"')");
 	/**
 	 * 
 	 */
@@ -110,7 +110,7 @@ var MailBox = MailBox || function(options) {
 		"timeout" : 5000,
 		"endpoint" : undefined
 	};
-	
+
 	/**
 	 * Empty function.
 	 */
@@ -128,7 +128,7 @@ var MailBox = MailBox || function(options) {
 			request.write("getFolders"); // 
 			request.on("success", function(response) {
 				// Do transformation to array of Folder objects.
-				response = stub.getFoldersResponse; // stub!
+				//response = stub.getFoldersResponse; // stub!
 				var folders = [];
 				for(var id in response.folders) {
 					folder = response.folders[id];
@@ -143,7 +143,7 @@ var MailBox = MailBox || function(options) {
 				events.success(folders);
 			});
 			request.on("error", events.error || noop);
-		}).send(options.endpoint);
+		}).send(options.endpoint + 'getfolders.json');
 	};
 	
 	/**
