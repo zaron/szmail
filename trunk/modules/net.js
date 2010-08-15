@@ -80,7 +80,10 @@ var HTTPRequestHandler = function(url, options) {
 		log('xhr open.');
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState != 4) { return; } // TODO: Error handling
-			var response = eval('('+xhr.responseText+')');
+			log('xhr received response from \'' + url + '\'');
+			var response = '';
+			if(url == '/'); // bad hack
+			else response = eval('('+xhr.responseText+')');
 			events["success"](response);
 		};
 		xhr.send(null);
