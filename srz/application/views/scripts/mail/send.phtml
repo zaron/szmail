@@ -1,0 +1,15 @@
+<div class="compose">
+    <form action="<?php echo $this->escape($this->sendform->getAction()); ?>" method="<?php echo $this->escape($this->sendform->getMethod()); ?>">
+        <div class="info">
+            <ul class="items">
+                <li class="item title"><img src="/images/compose_big.png" alt="" /><h2>Neue Nachricht verfassen</h2></li>
+                <?php echo $this->sendform->identity ?>
+                <?php echo $this->sendform->to ?>
+                <?php echo $this->sendform->cc ?>
+                <?php echo $this->sendform->bcc ?>
+                <?php echo $this->sendform->subject ?>
+            </ul>
+        </div>
+        <div class="content"><?php echo $this->sendform->content ?><?php echo $this->sendform->submit ?></div>
+    </form>
+</div>

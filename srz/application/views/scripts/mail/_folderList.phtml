@@ -1,0 +1,20 @@
+<?php
+
+// Deutsche GMail Ordnernamen... das stinkt gewaltig
+$array = array(
+    'INBOX',
+    '[Google Mail]',
+    '[Google Mail]/Alle Nachrichten',
+    '[Google Mail]/Entw&APw-rfe', // utf7-imap
+    '[Google Mail]/Gesendet',
+    '[Google Mail]/Spam',
+    '[Google Mail]/Papierkorb',
+    '[Google Mail]/Markiert',
+);
+$mail = new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig());
+$this->folders = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
+foreach($this->folders as $localname => $folder):
+    if(in_array($folder->getGlobalName(), $array)) continue;
+?>
+                        <li><a href="<?php echo $this->url(array('action' => 'index', 'format' => 'html', 'id' => null, 'folder' => $folder->getGlobalName()))?>"><?php echo $folder->getGlobalName(); /*$this->escape(mb_convert_encoding($folder->getGlobalName(),'UTF8','UTF7-IMAP'));*/ ?></a><span><a class="edit"></a><a class="delete"></a></span></li>
+<?php endforeach; ?>

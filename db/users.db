@@ -1,0 +1,8 @@
+CREATE TABLE `szmail`.`users` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`username` VARCHAR( 50 ) NOT NULL ,
+`password` VARCHAR( 50 ) NOT NULL
+) ENGINE = MYISAM ;
+
+INSERT INTO `szmail`.`users` (`id`, `username`, `password`) VALUES (NULL, 'otto', MD5(CONCAT("otto", "vhjdlrpsihgb5641")));
+INSERT INTO `szmail`.`users` (`id`, `username`, `password`) VALUES (NULL, 'eric', MD5(CONCAT("eric", "vhjdlrpsihgb5641")));

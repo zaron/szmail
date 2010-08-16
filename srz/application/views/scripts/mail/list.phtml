@@ -1,0 +1,23 @@
+		<div id="listing">
+<?php
+$lastDate = 0;
+foreach($this->mails as $mail) {
+	if($lastDate == 0) {
+?>
+			<p class="head date"><span><img src="/images/chevron-small-expand.png" alt="" /><?php $date = new Zend_Date(strtotime($mail['date'])); echo $date->toString(Zend_Date::WEEKDAY . ", ". Zend_Date::DAY .". ". Zend_Date::MONTH_NAME) ?></span> <span class="year">2010</span></p>
+			<ol>
+<?php
+} elseif($lastDate != date("dmY",strtotime($mail['date']))) {
+?>
+			</ol>
+			<p class="head date"><span><img src="/images/chevron-small-expand.png" alt="" /><?php $date = new Zend_Date(strtotime($mail['date'])); echo $date->toString(Zend_Date::WEEKDAY . ", ". Zend_Date::DAY .". ". Zend_Date::MONTH_NAME) ?></span> <span class="year">2010</span></p>
+			<ol>
+
+<?php
+}
+	$lastDate = date("dmY",strtotime($mail['date']));
+	echo $this->partial('mail/_listitem.phtml', array( 'mail' => $mail));
+}
+?>
+			</ol>
+		</div>

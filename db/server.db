@@ -1,0 +1,13 @@
+CREATE TABLE `szmail`.`server` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`user_id` INT NOT NULL ,
+`type` VARCHAR( 50 ) NOT NULL ,
+`main` BOOL NOT NULL ,
+`protocol` VARCHAR( 10 ) NOT NULL ,
+`host` VARCHAR( 85 ) NOT NULL ,
+`port` INT NOT NULL , 
+`username` VARCHAR( 85 ) NOT NULL ,
+`password` VARCHAR( 150 ) NOT NULL ,
+`label` VARCHAR( 100 ) NULL ,
+`comment` TEXT NULL
+) ENGINE = MYISAM ;
