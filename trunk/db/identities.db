@@ -1,0 +1,9 @@
+CREATE TABLE `szmail`.`identities` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`user_id` INT NOT NULL ,
+`server_id` INT NOT NULL ,
+`name` VARCHAR( 150 ) NOT NULL ,
+`email` VARCHAR( 150 ) NOT NULL ,
+`label` VARCHAR( 100 ) NOT NULL ,
+`comment` TEXT NOT NULL
+) ENGINE = MYISAM ;

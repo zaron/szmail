@@ -1,0 +1,22 @@
+<?php
+$url = $this->url(array(
+'controller' => 'mail',
+'action' => 'show',
+'id' => $this->uid));
+
+$flags = ($this->new == true)?"New ":"";
+$flags .= ($this->unread == true)?"Unread ":"";
+$flags .= ($this->answered == true)?"Answered":"";
+
+/*echo 
+"<tr>
+<td>".$this->id.", ".$this->uid."</td><td>".$flags.
+"</td><td><a href=\"#\" onclick=\"loadContent('".$url."')\">".$this->escape($this->subject)."</a></td>
+<td><a href=\"#\" onclick=\"loadContent('".$url."')\">".$this->escape($this->from)."</a></td>
+<td>".$this->escape($this->date)."</td>
+</tr>\n";*/
+?>
+<li class="mail_unread">
+	<p><span class="sender"><?php echo $this->parseEmail($this->from) ?></span> <span class="daytime"><?php echo date("G:i",strtotime($this->date)); ?></span></p>
+	<p class="subject"><a href="#" onclick="loadContent('<?php echo $url; ?>')"> <?php echo $this->escape($this->subject) ?></a></p>
+</li>

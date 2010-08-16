@@ -1,0 +1,38 @@
+<div class="content">
+<div class="menu noborder">
+<div class="left"><?php echo $this->folderName; ?></div>
+<div class="right pagination"><?php echo $this->paginationControl($this->mails, 'Sliding', 'mail/_pagination.phtml'); ?></div>
+</div>
+<table id="mail_table" cellspacing="0">
+
+    <!-- Table header -->
+
+    <thead>
+        <tr>
+            <th scope="col" class="checkbox"><img src="/images/ui-check-boxes.png" alt="" /></th>
+            <th scope="col" class="attachment"><img src="/images/paper-clip.png" alt="" /><a class="order"></a></th>
+            <th scope="col" class="subject">Betreff<a class="order"></a></th>
+            <th scope="col" class="from">Absender<a class="order"></a></th>
+            <th scope="col" class="date">Datum<a class="order"></a></th>
+            <th scope="col" class="size">Gr&ouml;&szlig;e<a class="order"></a></th>
+        </tr>
+    </thead>
+
+    <!-- Table body -->
+
+    <tbody>
+<?php
+$lastDate = 0;
+foreach($this->mails as $mail) {
+    echo $this->partial('mail/_listitem.phtml', array( 'mail' => $mail));
+}
+?>
+    </tbody>
+
+</table>
+
+<div class="menu noborder">
+<div class="left"></div>
+<div class="right pagination"><?php echo $this->paginationControl($this->mails, 'Sliding', 'mail/_pagination.phtml'); ?></div>
+</div>
+</div>

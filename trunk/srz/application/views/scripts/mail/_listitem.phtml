@@ -1,0 +1,8 @@
+        <tr>
+            <td class="checkbox"><div class="checkbox"><input type="checkbox" name="m_<?php echo $this->mail['uid']; ?>" /></div></td>
+            <td class="attachment"><a class="noattachment"></a></td>
+            <td class="subject"><?php if($this->mail['unread']): ?><b><?php endif;?><a href="<?php echo $this->url( array( 'controller' => 'mail', 'action' => 'show', 'id' => $this->mail['uid'])); ?>"><?php echo (empty($this->mail['subject'])) ? '<i>Kein Betreff</i>' : $this->escape($this->mail['subject']) ?></a><?php if($this->mail['unread']): ?></b><?php endif;?></td>
+            <td class="from"><a class="user_male"><?php echo $this->parseEmail($this->mail['from']) ?></a></td>
+            <td class="date"><?php echo $this->formatTime($this->mail['date']) ?></td>
+            <td class="size">23kb</td>
+        </tr>
