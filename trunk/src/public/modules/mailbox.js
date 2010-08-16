@@ -143,7 +143,7 @@ var MailBox = MailBox || function(options) {
 				events.success(folders);
 			});
 			request.on("error", events.error || noop);
-		}).send(options.endpoint + 'getfolders.json');
+		}).send(options.endpoint + 'mail/?format=json');
 	};
 	
 	/**

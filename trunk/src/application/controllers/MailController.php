@@ -49,7 +49,19 @@ class MailController extends Zend_Controller_Action
 		$page = (empty($request))?1:$request;
 		$paginator = $this->mail->getPaginator($itemsPerPage,$folder);
 		$paginator->setCurrentPageNumber($page);
-		$this->view->folderName = $folder;
+		$folders;
+		
+		$folderIterator = new RecursiveIteratorIterator($this->mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
+		$i = 0;
+		foreach ($folderIterator as $localName => $folder) {
+        	$folders[$i++] = array(
+        		"name" => $localName,
+				//"type" => "INBOX",
+				"mails" => $this->mail->count(),
+				"unread" => 3
+        	);
+		};
+		$this->view->folders = $folders;
 		$this->view->mails = $paginator;
 	}
 
