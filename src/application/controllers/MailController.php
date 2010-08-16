@@ -30,15 +30,15 @@ class MailController extends Zend_Controller_Action
 
 		//$this->_helper->layout()->setLayout("mail_layout");
 
-		//$context = $this->_helper->getHelper('contextSwitch');
-		$ajaxContext = $this->_helper->getHelper('AjaxContext');
-		$ajaxContext->addActionContext('index', 'html')
-		//$context->addActionContext('show', 'json')
+		$context = $this->_helper->getHelper('contextSwitch');
+		//$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		//$ajaxContext->addActionContext('index', 'json')
+		$context->addActionContext('index', 'json')
 		//  ->addActionContext('index', 'xml')
 
 		//->addActionContext('process', 'json')
 		->initContext();
-		//$this->_helper->contextSwitch()->setAutoJsonSerialization(false);
+		$this->_helper->contextSwitch()->setAutoJsonSerialization(true);
 	}
 
 	public function indexAction() {
