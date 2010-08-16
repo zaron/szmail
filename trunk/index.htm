@@ -11,35 +11,6 @@
 <script type="text/javascript" src="frontend.js"></script>
 
 <script type="text/javascript">
-
-require.reset();
-//require.useScriptTags(); // for local testing only
-require.setModuleRoot('modules');
-require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
-	var MailBox = require('mailbox').MailBox;
-	var mb = new MailBox({"endpoint": '/'});
-	mb.getFolders( {
-		'success' : function(folders) {
-			for ( var id in folders) {
-				gui_addFolder(folders[id], '#folders .n.separator');
-			}
-		},
-		'error' : function(error) {
-		}
-	});
-
-	mb.getMails( {
-		'success' : function(mails) {
-			for ( var id in mails) {
-				gui_addMail(mails[id]);
-			}
-		},
-		'error' : function(error) {
-		}
-	});
-});
-
-
 	function doIframe() {
 		o = document.getElementsByTagName('iframe');
 		for (i = 0; i < o.length; i++) {
@@ -68,7 +39,35 @@ require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
 		}
 	}
 
-$(document).ready(function() {
+$(function() {
+	require.reset();
+	//require.useScriptTags(); // for local testing only
+	require.setModuleRoot('modules');
+	require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
+		var MailBox = require('mailbox').MailBox;
+		var mb = new MailBox({"endpoint": '/'});
+		mb.getFolders( {
+			'success' : function(folders) {
+				for ( var id in folders) {
+					gui_addFolder(folders[id], '#folders .n.separator');
+				}
+				$(window).trigger('hashchange'); // Update selected folder.
+			},
+			'error' : function(error) {
+			}
+		});
+
+		mb.getMails( {
+			'success' : function(mails) {
+				for ( var id in mails) {
+					gui_addMail(mails[id]);
+				}
+			},
+			'error' : function(error) {
+			}
+		});
+	});
+	
 	$(window).bind('hashchange', function(event) {
 		log('hashchange event fired.');
 		HashNav.update();
@@ -78,7 +77,6 @@ $(document).ready(function() {
 	activeView.show();
 	startFrontend();
 	doIframe();
-	$(window).trigger('hashchange');
 });
 
 </script>

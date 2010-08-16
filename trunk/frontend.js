@@ -1,4 +1,3 @@
-var activeFolder;
 
 var activeView;
 
@@ -7,20 +6,24 @@ function log(msg)
 	$('#debug').prepend(msg+'<br/>');
 }
 
-var HashNav = {
-	map : {},
-	update : function(){
+var HashNavClass = function() {
+	var activeFolder = null;
+	this.map = {};
+	var map = this.map;
+	this.update = function() {
+		log('HashNav update!');
 		var hash = location.hash;
-		if(!hash.match(/#!\/?/)) return; // TODO: error handling
-		hash = hash.substr(4);
-		/*
-		var kv = hash.split('&');
-		for(var i = 0, i < kv.length, i++)
-		{
-			
-		}*/
-	}
+		if(!hash.match(/^#!\/.+\?/)) return; // TODO: error handling
+		var path = new String((/^#!\/.+\?/).exec(hash));
+		path = path.substr(2);
+		path = path.substr(0,path.length-2);
+		if (activeFolder)
+			map[activeFolder].removeClass('active');
+		activeFolder = path;
+		map[activeFolder].addClass('active');
+	};
 };
+var HashNav = new HashNavClass();
 
 
 function gui_showMail(mail)
@@ -75,23 +78,19 @@ function gui_addMail(mail)
 	el.appendTo($('#mail_table tbody'));
 }
 
-var folders = [];
 function gui_addFolder(folder, where) {
 	log("gui_addFolder called.");
 	if(folder.type != '') where = "#special_folders .n.separator"; 
 	
-	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/?ai=' + folder.id + '">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
-	folders[folder.id] = el;
+	var el = $('<li><a' + ((folder.type != '') ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/' + folder.name + '/?">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
+	log('map['+'/'+folder.name+'] added');
+	HashNav.map['/'+folder.name] = el;
 	el.insertBefore(where);
 	
 	// Click-function for Folders
 	el.click(function(event) {
 		log("folder '"+folder.name+"' clicked.");
 		setActiveView($('#view_folders'));
-		if (activeFolder)
-			activeFolder.removeClass('active');
-		el.addClass('active');
-		activeFolder = el;
 	});
 };
 
