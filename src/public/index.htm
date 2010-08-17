@@ -48,9 +48,7 @@ $(function() {
 		var mb = new MailBox({"endpoint": '/rpc'});
 		mb.getFolders( [], {
 			'success' : function(folders) {
-				for ( var id in folders) {
-					gui_addFolder(folders[id], '#folders .n.separator');
-				}
+				InboxNavigation.setFolders(folders);
 				$(window).trigger('hashchange'); // Update selected folder.
 			},
 			'error' : function(error) {
@@ -70,7 +68,7 @@ $(function() {
 	
 	$(window).bind('hashchange', function(event) {
 		log('hashchange event fired.');
-		HashNav.update();
+		InboxNavigation.update();
 	});
 	$('.content').hide();
 	activeView = $('#view_mail');
