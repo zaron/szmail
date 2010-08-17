@@ -30,11 +30,11 @@ class SZ_Paginator_Adapter_Mail implements Zend_Paginator_Adapter_Interface {
 	}
 
 	public function count() {
-		return $this->_manager->count();
+		return $this->_manager->countMessages();
 	}
 
 	public function getItems($offset, $itemCountPerPage) {
-		$from = $this->count()-$offset;
+		$from = $this->countMessages()-$offset;
 		$to = $from - $itemCountPerPage;
 		$to = ($to<1)?1:$to;
 		return $this->_manager->getList($from,$to);

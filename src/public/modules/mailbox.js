@@ -121,20 +121,8 @@ var MailBox = MailBox || function(options) {
 	this.getFolders = function(args, events) {
 		net.createJSONRPCRequest(function(request){
 			request.setMethod("getFolders");
-			request.write(args);			
+			request.write(args);
 			request.on("success", function(response) {
-				log(JSON.stringify(response));
-				/*var folders = [];
-				for(var id in response.result) {
-					folder = response.result[id];
-					folders.push(new Folder({
-						name   : folder.name, 
-						id     : folder.id,
-						type   : folder.type,
-						unread : folder.unread,
-						mails  : folder.mails
-					}));
-				}*/
 				events.success(response.result);
 			} || noop);
 			request.on("error", events.error || noop);
@@ -147,22 +135,12 @@ var MailBox = MailBox || function(options) {
 	 * @param events
 	 * @returns
 	 */
-	this.getMails = function(events, constraints) {
-		net.createHTTPRequest(function(request){
-			//request.write('getMails');
+	this.getMails = function(args, events) {
+		net.createJSONRPCRequest(function(request){
+			request.setMethod("getMails");
+			request.write(args);
 			request.on("success", function(response) {
-				var mails = [];
-				for(var id in response.mails) {
-					var mail = response.mails[id];
-					mails.push(new Mail({
-						from : mail.from,
-						id : mail.id,
-						attachments : mail.attachments, 
-						date : mail.date,
-						subject : mail.subject
-					}));
-				}
-				events.success(mails);
+				events.success(response.result);
 			});
 			request.on("error", events.error || noop);
 		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});

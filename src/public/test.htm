@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>szMail Testbench</title>
+<style type="text/css">body{font-family:monospace;}.TRANSMIT{color:#883;}.RECEIVE{color:#838;}</style>
+<script type="text/javascript" src="lib/yabble.js"></script>
+<script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript">
+function log(msg,level){
+	$('#debug').prepend("<span class=\""+level+"\">"+(new Date()) +" :" +msg + '</span><br/>');
+}
+
+function log_frontend(msg) {
+	$('#debug').prepend("<span>Frontend: " +msg + '</span><br/>');
+}
+
+$(function() {
+	require.reset();
+	require.setModuleRoot('modules');
+	require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
+		var MailBox = require('mailbox').MailBox;
+		var mb = new MailBox({"endpoint": '/rpc'});
+
+		$('#getFoldersInvoke').click(function(){
+			var folder = $('#getFolders').val();
+			folder = ((folder) ? [folder] : []); 
+			mb.getFolders(folder, {
+				'success' : log_frontend,
+				'error' : log_frontend,
+			});
+		});
+
+		$('#getMailsInvoke').click(function(){
+			var folder = $('#getMails').val();
+			var flags = $('#getMailsFlags').val();
+			if(flags) folder = [folder,flags]; 
+			else folder = ((folder) ? [folder] : []);
+			
+			mb.getMails(folder, {
+				'success' : log_frontend,
+				'error' : log_frontend,
+			});
+		});
+	});
+});
+
+</script>
+</head>
+<body>
+<div>getFolders($folder = <input type="text" id="getFolders" />) <a id="getFoldersInvoke">invoke</a></div>
+<div>getMails($folder = <input type="text" id="getMails" />,$flags = <input type="text" id="getMailsFlags" />) <a id="getMailsInvoke">invoke</a></div>
+<hr />
+<div id="debug"></div>
+</body>
+
+</html>
