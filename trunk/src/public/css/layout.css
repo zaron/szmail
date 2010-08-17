@@ -96,67 +96,6 @@ table {
 
 
 
-/*****************
- Inbox Navigation
-*****************/
-
-div#inbox_navigation {
-    width: 180px;
-    padding: 3px;
-    border: 1px solid #BBCDE3;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-div#inbox_navigation ul {
-    list-style: none;
-}
-
-div#inbox_navigation li {
-    height: 23px;
-    margin: 0 0 4px 0;
-}
-
-div#inbox_navigation li.active {
-    border: 1px solid #609958;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background: url(../images/background_button_green.png) repeat-x;
-}
-
-div#inbox_navigation li.active a {
-    font-weight: bold;
-    color: #FFF;
-    line-height: 23px;
-    text-decoration: none;
-    background-color: inherit;
-}
-
-div#inbox_navigation li a {
-    display: block;
-    background-position: 3px 3px;
-    background-repeat:  no-repeat;
-    padding: 0 0 0 25px;
-    line-height: 23px;
-}
-div#inbox_navigation li.active span.small {
-color: #fff; 
-}
-div#inbox_navigation li span.small {
-	font-family: Arial, Tahoma, Verdana, sans-serif;
-	font-size: 10px;
-	color: #AAA;
-	text-align: right;
-	padding:3px 3px 0 0;
-	float: right;
-}
-
-div#inbox_navigation li a.inbox {background-image: url(../images/inbox.png);}
-div#inbox_navigation li a.sent {background-image: url(../images/sent.png);}
-div#inbox_navigation li a.trash {background-image: url(../images/trashbin.png);}
-div#inbox_navigation li a.drafts {background-image: url(../images/drafts.png);}
-div#inbox_navigation li a.spam {background-image: url(../images/spam.png);}
-
 
 /*******
 
@@ -409,6 +348,67 @@ span.button
 }
 
 
+/*****************
+ Inbox Navigation
+*****************/
+
+div#inbox_navigation {
+    width: 180px;
+    padding: 3px;
+    border: 1px solid #BBCDE3;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+div#inbox_navigation ul {
+    list-style: none;
+}
+
+div#inbox_navigation li {
+    height: 23px;
+    margin: 0 0 4px 0;
+}
+
+div#inbox_navigation li.active {
+    border: 1px solid #609958;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: url(../images/background_button_green.png) repeat-x;
+}
+
+div#inbox_navigation li.active a {
+    font-weight: bold;
+    color: #FFF;
+    line-height: 23px;
+    text-decoration: none;
+    background-color: inherit;
+}
+
+div#inbox_navigation li a {
+    display: block;
+    background-position: 3px 3px;
+    background-repeat:  no-repeat;
+    
+    line-height: 23px;
+}
+div#inbox_navigation li.active span.small {
+color: #fff; 
+}
+div#inbox_navigation li span.small {
+	font-family: Arial, Tahoma, Verdana, sans-serif;
+	font-size: 10px;
+	color: #AAA;
+	text-align: right;
+	padding:3px 3px 0 0;
+	float: right;
+}
+
+div#inbox_navigation li img.inbox {background-image: url(../images/inbox.png);}
+div#inbox_navigation li img.sent {background-image: url(../images/sent.png);}
+div#inbox_navigation li img.trash {background-image: url(../images/trashbin.png);}
+div#inbox_navigation li img.drafts {background-image: url(../images/drafts.png);}
+div#inbox_navigation li img.spam {background-image: url(../images/spam.png);}
+
 
 div#inbox_navigation h3
 {
@@ -427,17 +427,21 @@ div#inbox_navigation li.separator
 }
 div#inbox_navigation li a.add_folder
 {
-    margin-top: 6px;
-    background-image: url(../images/add_folder.png);
     font-style: italic;
 }
-div#inbox_navigation li a.edit_folder
+div#inbox_navigation li img
 {
-    background-image: url(../images/edit_folder.png);
-    font-style: italic;
+	margin: 3px 4px 0 3px;
+	float:left;
+	width: 16px;
+	height: 16px;	
 }
-div#inbox_navigation li a {background-image: url(../images/folder-horizontal.png);}
-div#inbox_navigation ul#folders li.active a {background-image: url(../images/folder-horizontal-open.png);}
+div#inbox_navigation li img.add_folder{background-image: url(../images/add_folder.png);}
+div#inbox_navigation li img.edit_folder{background-image: url(../images/edit_folder.png);}
+
+div#inbox_navigation li.n a {font-style: italic;}
+div#inbox_navigation li img {background-image: url(../images/folder-horizontal.png);}
+div#inbox_navigation ul#folders li.active img {background-image: url(../images/folder-horizontal-open.png);}
 
 
 

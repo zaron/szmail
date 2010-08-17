@@ -82,7 +82,7 @@ function gui_addFolder(folder, where) {
 	log("gui_addFolder called.");
 	if(folder.type) where = "#special_folders .n.separator"; 
 	
-	var el = $('<li><a' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' href="#!/' + folder.name + '/?">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
+	var el = $('<li><img src="/images/placeholder.png"' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' alt="" /><a href="#!/' + folder.name + '/?">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
 	log('map['+'/'+folder.name+'] added');
 	HashNav.map['/'+folder.name] = el;
 	el.insertBefore(where);
