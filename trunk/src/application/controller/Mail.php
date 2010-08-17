@@ -31,6 +31,29 @@ class Controller_Mail {
 	/**
 	 * Returns the folders
 	 *
+	 * @param  string $folder
+	 * @param  int    $offset
+	 * @return array
+	 */
+	public function getMails($folder = 'INBOX', $offset = 0)
+	{
+		$mail = $this::getMail();
+		$paginator = $mail->getPaginator(15, $folder);
+		$mails = array(); 
+		/*foreach ($paginator as $email) {
+			$mails[] = array(
+        		"name" => $localName,
+				"type" => $type,
+				"mails" => $mails,
+				"unread" => ($mails - $seen)
+			);
+		}*/
+		return $paginator;
+	}
+
+	/**
+	 * Returns the folders
+	 *
 	 * @param  string $root
 	 * @return array
 	 */
@@ -38,7 +61,6 @@ class Controller_Mail {
 	{
 		$mail = $this::getMail();
 		$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
-		$i = 0;
 		foreach ($folderIterator as $localName => $folder) {
 			$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
 			$mails = $mail->countMessages($folder->getGlobalName());
@@ -47,7 +69,7 @@ class Controller_Mail {
 			{
 				$type = $this->map[$localName];
 			}
-			$folders[$i++] = array(
+			$folders[] = array(
         		"name" => $localName,
 				"type" => $type,
 				"mails" => $mails,

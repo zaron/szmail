@@ -90,7 +90,7 @@ var HTTPRequestHandler = function(url, options) {
 		// 
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState != 4) { return; } // TODO: Error handling
-			log('xhr received response from \'' + url + '\'');
+			log(xhr.responseText,"RECEIVE");
 			var response = '';
 			if(url == '/'); // bad hack
 			else response = JSON.parse(xhr.responseText);
@@ -102,7 +102,7 @@ var HTTPRequestHandler = function(url, options) {
 			xhr.send(null);
 			return;
 		}
-		log(writeBuffer);
+		log(writeBuffer,"TRANSMIT");
 		xhr.send(writeBuffer);
 	};
 };
@@ -128,11 +128,11 @@ exports.createJSONRPCRequest = function(process) {
 			jsonrpcInterface.setMethod = function(m) {
 				method = m;
 			};
-			jsonrpcInterface.write = function(s) {
+			jsonrpcInterface.write = function(params) {
 				write(JSON.stringify({
 					"jsonrpc" : exports.JSONRPC_VERSION_2,
 					"method"  : method,
-					"params"  : s,
+					"params"  : params,
 					"id"      : "" + (JSONRPC_ID_COUNTER++)
 				}));
 			};
