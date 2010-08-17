@@ -18,21 +18,16 @@
  * @license    http://szlab.de/license/new-bsd     New BSD License
  */
 
-class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+class Bootstrap extends Zend_Application_Bootstrap_BootstrapAbstract
 {
-	protected function _initDoctype() {
-		$this->bootstrap('view');
-		$view = $this->getResource('view');
-		$view->doctype('XHTML1_TRANSITIONAL');
-	}
-
 	protected function _initAutoload() {
-		$moduleLoader = new Zend_Application_Module_Autoloader(array(
+		$resourceLoader = new Zend_Loader_Autoloader_Resource(array(
 			'namespace' => '',
 			'basePath' => APPLICATION_PATH));
 		$a =  Zend_Loader_Autoloader::getInstance();
 		$a->registerNamespace("SZ_");
-		return $moduleLoader;
+	 	$resourceLoader->addResourceType('Controller', 'controller/', 'Controller');
+		return $resourceLoader;
 	}
 
 	protected function _initUTF8DB() {
@@ -42,13 +37,43 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		Zend_Registry::set('db',$db);
 	}
 
-	protected function _initPlugins() {
-		$this->bootstrap('FrontController');
-		$front = $this->getResource('FrontController');
-		$front->registerPlugin(new Plugin_Authentication());
+	private function addClasses(Zend_Json_Server $server){
+		$server->setClass('Controller_Test');
+		$server->setClass('Controller_Mail');
+	}
 
-		$this->bootstrap('db');
-		$db = $this->getResource('db');
+	private function preDispatch(Zend_Json_Server $server) {
+		$request = $server->getRequest();
+		if($request->getMethod() != "login") {
+			//do nothing yet
+		}
+	}
+
+	public function run() {
+		$server = new Zend_Json_Server();
+
+		// register methods
+		$this->addClasses($server);
+
+		// check request
+		$this->preDispatch($server);
+
+		if($server->getResponse()->isError()) {
+			echo $server->getResponse();
+			return;
+		}
+
+		if ('GET' == $_SERVER['REQUEST_METHOD']) {
+			// Indicate the URL endpoint, and the JSON-RPC version used:
+			$server->setTarget('/api/1.0/jsonrpc.php')
+			->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
+
+			// Return the SMD to the client
+			header('Content-Type: application/json');
+			echo $server->getServiceMap();
+			return;
+		}
+		$server->handle();
 	}
 }
 
