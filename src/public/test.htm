@@ -7,6 +7,8 @@
 <style type="text/css">body{font-family:monospace;}.TRANSMIT{color:#883;}.RECEIVE{color:#838;}</style>
 <script type="text/javascript" src="lib/yabble.js"></script>
 <script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery.zend.jsonrpc.js"></script>
+<script type="text/javascript" src="lib/json2.js"></script>
 <script type="text/javascript">
 function log(msg,level){
 	$('#debug').prepend("<span class=\""+level+"\">"+(new Date()) +" :" +msg + '</span><br/>');
@@ -16,7 +18,7 @@ function log_frontend(msg) {
 	$('#debug').prepend("<span>Frontend: " +msg + '</span><br/>');
 }
 
-$(function() {
+/*$(function() {
 	require.reset();
 	require.setModuleRoot('modules');
 	require.ensure( [ 'json', 'net' ], function(require) {
@@ -26,7 +28,7 @@ $(function() {
 			net.createJSONRPCRequest(function(request){
 				request.setMethod($('#method').val());
 				var args = [];
-				if($('#arg1').val()) args.push(eval(('(' + (arg1) + ')')));
+				if($('#arg1').val()) args.push(eval(('(' + ($('#arg2').val()) + ')')));
 				if($('#arg2').val()) args.push(eval(('(' + ($('#arg2').val()) + ')')));
 				if($('#arg3').val()) args.push(eval(('(' + ($('#arg3').val()) + ')')));
 				request.write(args);
@@ -35,12 +37,49 @@ $(function() {
 			}).send('/rpc', {method : net.HTTP_METHOD_POST});
 		});
 	});
+});*/
+
+function eRun(msg) {
+	msg = $.trim(msg);
+	var client = jQuery.Zend.jsonrpc({url: 'rpc.php'});
+	var ev = 'var result = client.'+msg+';';
+	//alert(ev);
+	try {
+		eval(ev);
+		if(client.error != 0) {
+			log_frontend(json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request));
+		} else {
+			log_frontend(ev+' <br />result : '+json.stringify(result));
+		}
+	} catch(e) {
+		log_frontend(e);
+	}
+}
+
+	 
+$(function() {
+	var con = $('#console');
+	con.keypress(function(event) {
+		if(event.keyCode == 13) {
+			eRun(con.val());
+			con.val('');
+		}
+	});
+	require.reset();
+	 require.setModuleRoot('modules');
+	 require.ensure( [ 'json', 'net' ], function(require) {
+	  json = require('json');
+	 });
 });
+
 
 </script>
 </head>
 <body>
+<!--
 <div>method:<input type="text" id="method" />(<input type="text" id="arg1" />,<input type="text" id="arg2" />,<input type="text" id="arg3" />) <button id="invoke">invoke</button></div>
+-->
+<div><input type="text" id="console" style="width:100%;height:40px;padding:5px;" /></div>
 <hr />
 <div id="debug"></div>
 </body>
