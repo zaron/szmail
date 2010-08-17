@@ -20,6 +20,14 @@
 
 class Controller_Mail {
 
+	private $map = array(
+		'INBOX'        => 'INBOX',
+		'Papierkorb'   => 'TRASH',
+		'Gesendet'     => 'SENT',
+		'Spam'         => 'SPAM',
+		'Entw&APw-rfe' => 'DRAFTS'
+	);
+
 	/**
 	 * Returns the folders
 	 *
@@ -32,11 +40,18 @@ class Controller_Mail {
 		$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
 		$i = 0;
 		foreach ($folderIterator as $localName => $folder) {
+			$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
+			$mails = $mail->countMessages($folder->getGlobalName());
+			$type = '';
+			if(isset($this->map[$localName]))
+			{
+				$type = $this->map[$localName];
+			}
 			$folders[$i++] = array(
         		"name" => $localName,
-			//"type" => "INBOX",
-				"mails" => $mail->count(),
-				"unread" => 3
+				"type" => $type,
+				"mails" => $mails,
+				"unread" => ($mails - $seen)
 			);
 		};
 		return  $folders;

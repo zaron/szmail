@@ -31,7 +31,17 @@ class SZ_Mail_Manager_Imap {
 		$this->mail = new SZ_Mail_Storage_Imap($conf->imap);
 	}
 
-	public function count() {
+	public function countMessages($folder = null, $flags = null) {
+		if($folder !== null) {
+			$count = 'n/a';
+			try {
+				$this->mail->selectFolder($folder);
+				if($flags !== null) $count = $this->mail->countMessages($flags);
+				else $count = $this->mail->count();
+			} catch(Exception $e){}
+			$this->mail->selectFolder('INBOX');
+			return $count;
+		}
 		if($this->count == -1) {
 			$this->count = $this->mail->count();
 		}
