@@ -19,29 +19,20 @@ function log_frontend(msg) {
 $(function() {
 	require.reset();
 	require.setModuleRoot('modules');
-	require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
-		var MailBox = require('mailbox').MailBox;
-		var mb = new MailBox({"endpoint": '/rpc'});
-
-		$('#getFoldersInvoke').click(function(){
-			var folder = $('#getFolders').val();
-			folder = ((folder) ? [folder] : []); 
-			mb.getFolders(folder, {
-				'success' : log_frontend,
-				'error' : log_frontend,
-			});
-		});
-
-		$('#getMailsInvoke').click(function(){
-			var folder = $('#getMails').val();
-			var flags = $('#getMailsFlags').val();
-			if(flags) folder = [folder,flags]; 
-			else folder = ((folder) ? [folder] : []);
-			
-			mb.getMails(folder, {
-				'success' : log_frontend,
-				'error' : log_frontend,
-			});
+	require.ensure( [ 'json', 'net' ], function(require) {
+		json = require('json');
+		net = require('net');
+		$('#invoke').click(function(){
+			net.createJSONRPCRequest(function(request){
+				request.setMethod($('#method').val());
+				var args = [];
+				if($('#arg1').val()) args.push(eval(('(' + (arg1) + ')')));
+				if($('#arg2').val()) args.push(eval(('(' + ($('#arg2').val()) + ')')));
+				if($('#arg3').val()) args.push(eval(('(' + ($('#arg3').val()) + ')')));
+				request.write(args);
+				request.on("success", log_frontend);
+				request.on("error", log_frontend || noop);
+			}).send('/rpc', {method : net.HTTP_METHOD_POST});
 		});
 	});
 });
@@ -49,8 +40,7 @@ $(function() {
 </script>
 </head>
 <body>
-<div>getFolders($folder = <input type="text" id="getFolders" />) <a id="getFoldersInvoke">invoke</a></div>
-<div>getMails($folder = <input type="text" id="getMails" />,$flags = <input type="text" id="getMailsFlags" />) <a id="getMailsInvoke">invoke</a></div>
+<div>method:<input type="text" id="method" />(<input type="text" id="arg1" />,<input type="text" id="arg2" />,<input type="text" id="arg3" />) <button id="invoke">invoke</button></div>
 <hr />
 <div id="debug"></div>
 </body>
