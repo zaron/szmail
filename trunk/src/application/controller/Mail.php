@@ -28,7 +28,7 @@ class Controller_Mail {
 	 */
 	public function getFolders($root = '')
 	{
-		$mail = this::getMail();
+		$mail = $this::getMail();
 		$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
 		$i = 0;
 		foreach ($folderIterator as $localName => $folder) {
