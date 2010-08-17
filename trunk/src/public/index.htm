@@ -4,24 +4,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>szMail</title>
-<link rel="stylesheet" href="css/layout.css"></link>
+<link rel="stylesheet" href="css/layout.css" />
 
 <script type="text/javascript" src="lib/yabble.js"></script>
 <script type="text/javascript" src="lib/jquery.js"></script>
-<script type="text/javascript" src="lib/jquery.zend.jsonrpc.js"></script>
-<script type="text/javascript" src="lib/json2.js"></script>
 <script type="text/javascript" src="frontend.js"></script>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		myApi = jQuery.Zend.jsonrpc( {
-			url : '/api/1.0/jsonrpc'
-		});
-
-		alert('5+5=' + myApi.add(5, 5));
-
-	});
-
+<script type="text/javascript"> 
 	function doIframe() {
 		o = document.getElementsByTagName('iframe');
 		for (i = 0; i < o.length; i++) {
@@ -50,144 +39,124 @@
 		}
 	}
 
-	$(function() {
-		require.reset();
-		//require.useScriptTags(); // for local testing only
-		require.setModuleRoot('modules');
-		require.ensure( [ 'mailbox', 'net', 'stub' ], function(require) {
-			var MailBox = require('mailbox').MailBox;
-			var mb = new MailBox( {
-				"endpoint" : '/'
-			});
-			mb.getFolders( {
-				'success' : function(folders) {
-					for ( var id in folders) {
-						gui_addFolder(folders[id], '#folders .n.separator');
-					}
-					$(window).trigger('hashchange'); // Update selected folder.
+$(function() {
+	require.reset();
+	//require.useScriptTags(); // for local testing only
+	require.setModuleRoot('modules');
+	require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
+		var MailBox = require('mailbox').MailBox;
+		var mb = new MailBox({"endpoint": '/rpc'});
+		mb.getFolders( [], {
+			'success' : function(folders) {
+				for ( var id in folders) {
+					gui_addFolder(folders[id], '#folders .n.separator');
+				}
+				$(window).trigger('hashchange'); // Update selected folder.
 			},
 			'error' : function(error) {
 			}
-			});
+		});
 
-			mb.getMails( {
-				'success' : function(mails) {
-					for ( var id in mails) {
-						gui_addMail(mails[id]);
-					}
-				},
-				'error' : function(error) {
+/*		mb.getMails( {
+			'success' : function(mails) {
+				for ( var id in mails) {
+					gui_addMail(mails[id]);
 				}
-			});
-		});
-
-		$(window).bind('hashchange', function(event) {
-			log('hashchange event fired.');
-			HashNav.update();
-		});
-		$('.content').hide();
-		activeView = $('#view_mail');
-		activeView.show();
-		startFrontend();
-		doIframe();
+			},
+			'error' : function(error) {
+			}
+		});*/
 	});
+	
+	$(window).bind('hashchange', function(event) {
+		log('hashchange event fired.');
+		HashNav.update();
+	});
+	$('.content').hide();
+	activeView = $('#view_mail');
+	activeView.show();
+	startFrontend();
+	doIframe();
+});
+
 </script>
 </head>
 <body>
 
 <div id="debug"></div>
-<div id="header">
-<div id="logo">
-<h1><a>szMail</a></h1>
-<div id="headerbar">Willkommen, <a href="">Eric Barmeyer</a> | <a
-	href="">Accounteinstellungen</a> | <a href="" class="logout">Abmelden</a></div>
-</div>
-</div>
-<div id="wrapper">
+      <div id="header">
+            <div id="logo"><h1><a>szMail</a></h1>
+            	<div id="headerbar">Willkommen, <a href="">Eric Barmeyer</a> | <a href="">Accounteinstellungen</a> | <a href="" class="logout">Abmelden</a></div>
+            </div>
+        </div>
+        <div id="wrapper">
 
-<div id="navigation">
-<div id="inbox_navigation">
-<ul id="special_folders">
+            <div id="navigation">
+                <div id="inbox_navigation">
+                    <ul id="special_folders">
+                    	
+                        <li class="n separator"></li>
+                    </ul>
 
-	<li class="n separator"></li>
-</ul>
+                    <h3>Ordner</h3>
+                    <ul id="folders">
+						
+                        <li class="n separator"></li>
+                        <li class="n"><a class="add_folder">Ordner hinzuf&uuml;gen</a></li>
+                        <li class="n"><a class="edit_folder">Ordner verwalten</a></li>
+                    </ul>
+                </div>
+            </div>
 
-<h3>Ordner</h3>
-<ul id="folders">
-
-	<li class="n separator"></li>
-	<li class="n"><a class="add_folder">Ordner hinzuf&uuml;gen</a></li>
-	<li class="n"><a class="edit_folder">Ordner verwalten</a></li>
-</ul>
-</div>
-</div>
-
-<div id="content">
-<div id="universalbar">
-<div id="reload_button"><a href="#"></a></div>
-<div id="search"><a class="bookmark" href="#"></a><a class="go"
-	href="#"></a>
-<div id="searchbar">
-<div id="suggest">
-<ul>
-	<li class="search_mails"><a>Nachrichten mit diesem Absender
-	suchen<br />
-	<span class="subject">Von: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
-	<li class="new_mail"><a>Neue Nachricht verfassen<br />
-	<span class="subject">An: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
-</ul>
-</div>
-<input id="searchbox" autocomplete="off" type="text" name="search" /></div>
-</div>
-</div>
-
-<!--<div id="notifications">
+            <div id="content">
+                <div id="universalbar">
+                    <div id="reload_button"><a href="#"></a></div>
+                    <div id="search"><a class="bookmark" href="#"></a><a class="go" href="#"></a><div id="searchbar"><div id="suggest">
+                                <ul>
+                                    <li class="search_mails"><a>Nachrichten mit diesem Absender suchen<br/><span class="subject">Von: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                    <li class="new_mail"><a>Neue Nachricht verfassen<br/><span class="subject">An: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                </ul>
+                            </div><input id="searchbox" autocomplete="off" type="text" name="search" /></div></div>
+                </div>
+                
+                <!--<div id="notifications">
                     <div class="notification"><p class="ok">Everythings fine.</p></div>
                     <div class="notification"><p class="warning">Quota is at 89%.</p></div>
                 </div>-->
+                
+                
+                <div id="content_wrapper" class="content_wrapper">
 
-
-<div id="content_wrapper" class="content_wrapper"><!-- view mail -->
+<!-- view mail -->
 
 <div class="content" id="view_mail">
-<h2>Betreff der eMail</h2>
-<div class="panel">
-<div class="right">
-<div class="jqPlot" id="history_plot"
-	style="height: 89px; width: 366px;"></div>
-</div>
-<div class="information left">
-<p class="received"><span class="header">Sent: </span><span>Name
-des Absenders</span></p>
-<p class="from"><span class="header">From: </span><span
-	class="user_male">eMail-Adresse@des.Absenders</span></p>
-<p class="to"><span class="header">To: </span><span
-	class="user_male">eMail-Adresse@der.Empfaenger</span></p>
-<p class="cc"><span class="header">CC: </span>eMail-Adresse@der.Empfaenger</p>
-<p class="bcc"><span class="header">BCC: </span>eMail-Adresse@der.Empfaenger</p>
-</div>
-</div>
-<div class="menu">
-<div class="left"><span class="button"><a class="reply"
-	href="#">Antworten</a></span><span class="button"><a class="reply_all"
-	href="#">Allen Antworten</a></span><span class="button"><a
-	class="forward" href="#">Weiterleiten</a></span></div>
-<div class="right"><span class="button"><a
-	class="mail_history" href="#">Verlauf</a></span><span class="button"><a
-	class="add_note" href="#">Notiz hinzuf&uuml;gen</a></span></div>
-</div>
-<div class="mail_content">
-<div class="view_switcher">
-<div><span class="button left"><a class="view_text">Text</a></span><span
-	class="button right"><a class="view_html active">HTML</a></span></div>
-</div>
-<div class="htmlview"><iframe id="mail_frame"
-	src="email/html_email_basic_template.html" frameborder="0" width="100%"
-	height="450"></iframe></div>
-</div>
+    <h2>Betreff der eMail</h2>
+    <div class="panel">
+		<div class="right"><div class="jqPlot" id="history_plot" style="height:89px; width:366px;"></div>
+	    </div>
+	    <div class="information left">
+	        <p class="received"><span class="header">Sent: </span><span>Name des Absenders</span></p>
+	        <p class="from"><span class="header">From: </span><span class="user_male">eMail-Adresse@des.Absenders</span></p>
+	        <p class="to"><span class="header">To: </span><span class="user_male">eMail-Adresse@der.Empfaenger</span></p>
+	        <p class="cc"><span class="header">CC: </span>eMail-Adresse@der.Empfaenger</p>
+	        <p class="bcc"><span class="header">BCC: </span>eMail-Adresse@der.Empfaenger</p>
+	    </div>
+    </div>
+    <div class="menu">
+        <div class="left"><span class="button"><a class="reply" href="#">Antworten</a></span><span class="button"><a class="reply_all" href="#">Allen Antworten</a></span><span class="button"><a class="forward" href="#">Weiterleiten</a></span></div>
+        <div class="right"><span class="button"><a class="mail_history" href="#">Verlauf</a></span><span class="button"><a class="add_note" href="#">Notiz hinzuf&uuml;gen</a></span></div>
+    </div>
+    <div class="mail_content">
+    	<div class="view_switcher"><div><span class="button left"><a class="view_text">Text</a></span><span class="button right"><a class="view_html active">HTML</a></span></div></div>
+        <div class="htmlview">
+        <iframe id="mail_frame" src="email/html_email_basic_template.html" frameborder="0" width="100%" height="450"></iframe>
+        </div>
+    </div>
 </div>
 
-<!-- end: view mail --> <!--  view folders -->
+<!-- end: view mail -->
+
+<!--  view folders -->
 
 <div class="content" id="view_folders">
 <div class="menu noborder">
@@ -195,6 +164,7 @@ des Absenders</span></p>
 <div class="right pagination"></div>
 </div>
 <table id="mail_table" cellspacing="0">
+
 	<thead>
 		<tr>
 			<th scope="col" class="checkbox"><img
@@ -207,8 +177,10 @@ des Absenders</span></p>
 			<th scope="col" class="size">Gr&ouml;&szlig;e<a class="order"></a></th>
 		</tr>
 	</thead>
+
 	<tbody>
 	</tbody>
+
 </table>
 
 <div class="menu noborder">
@@ -217,11 +189,14 @@ des Absenders</span></p>
 </div>
 </div>
 
-<!-- end: view folders --></div>
+<!-- end: view folders -->
+
+
 </div>
-<div class="clear"></div>
-</div>
-<div id="footer">powered by szMail</div>
+            </div>
+			<div class="clear"></div>
+        </div>
+        <div id="footer">powered by szMail</div>
 </body>
 
 </html>

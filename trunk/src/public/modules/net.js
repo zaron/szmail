@@ -1,4 +1,10 @@
-//require.define({"net": function(require, exports, module) {
+var JSON = require('json');
+
+//Constants.
+exports.HTTP_METHOD_GET   = 'GET';
+exports.HTTP_METHOD_POST  = 'POST';
+exports.JSONRPC_VERSION_2 = '2.0';
+
 
 // Empty function.
 var noop = function() {};
@@ -25,13 +31,13 @@ function createXMLHttpRequest() {
 var HTTPRequestHandler = function(url, options) {
 
 	options = options || {};
-    options.method = options.method || "GET";
+    options.method = options.method || exports.HTTP_METHOD_GET;
     options.headers = options.headers || {};
 
 	
     var _this = this;
     
-	var writeBuffer = [];
+	var writeBuffer = "";
     
     var events = {
     	success : noop,
@@ -53,7 +59,7 @@ var HTTPRequestHandler = function(url, options) {
 	 * @param s
 	 */
 	this.write = function(s) {
-		writeBuffer.push(s);
+		writeBuffer += s;
 	};
 
     /**
@@ -72,21 +78,67 @@ var HTTPRequestHandler = function(url, options) {
      * 
      */
 	this.send = function() {
-		// TODO: Use an engine to write to a HTTP stream (XHR in browsers)
-		log('send called.');
+		// Create XHR object and open connection to given URL.
 		var xhr = createXMLHttpRequest();
-		log('xhr created ('+ options.method +','+ url +')');
 		xhr.open(options.method, url, true);
-		log('xhr open.');
+		
+		// Set HTTP headers.
+		for(var name in options.headers) {
+			xhr.setRequestHeader(name, options.headers[name]);
+		}
+		
+		// 
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState != 4) { return; } // TODO: Error handling
 			log('xhr received response from \'' + url + '\'');
 			var response = '';
 			if(url == '/'); // bad hack
-			else response = eval('('+xhr.responseText+')');
+			else response = JSON.parse(xhr.responseText);
 			events["success"](response);
 		};
-		xhr.send(null);
+		
+		// Send request.
+		if(options.method == exports.HTTP_METHOD_GET) {
+			xhr.send(null);
+			return;
+		}
+		log(writeBuffer);
+		xhr.send(writeBuffer);
+	};
+};
+
+var JSONRPC_ID_COUNTER = 1;
+
+/**
+ * Creates a new JSONRPC request.
+ * 
+ * @param process
+ */
+exports.createJSONRPCRequest = function(process) {
+	return {
+		"send" : function(url, options) {
+			// HTTP content-type must be 'application/json'.
+			options.headers = options.headers || {};
+			options.headers['Content-Type'] = 'application/json';
+			
+			var handler = new HTTPRequestHandler(url, options);
+			var jsonrpcInterface = handler.publicInterface;
+			var write = handler.publicInterface.write;
+			var method = "";
+			jsonrpcInterface.setMethod = function(m) {
+				method = m;
+			};
+			jsonrpcInterface.write = function(s) {
+				write(JSON.stringify({
+					"jsonrpc" : exports.JSONRPC_VERSION_2,
+					"method"  : method,
+					"params"  : s,
+					"id"      : "" + (JSONRPC_ID_COUNTER++)
+				}));
+			};
+			process(jsonrpcInterface);
+			handler.send();
+		}
 	};
 };
 
@@ -104,4 +156,3 @@ exports.createHTTPRequest = function(process) {
 		}
 	};
 };
-//}});

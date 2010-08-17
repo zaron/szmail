@@ -1,8 +1,4 @@
-//require.define({"mailbox": function(require, exports, module) {
-
-
 var net = require('net');
-var stub = require('stub');
 
 /**
  * 
@@ -122,16 +118,15 @@ var MailBox = MailBox || function(options) {
 	 * @param events
 	 * @returns
 	 */
-	this.getFolders = function(events, constraints) {
-		net.createHTTPRequest(function(request){
-			request.headers["Content-Length"] = 1234;
-			request.write("getFolders"); // 
+	this.getFolders = function(args, events) {
+		net.createJSONRPCRequest(function(request){
+			request.setMethod("getFolders");
+			request.write(args);			
 			request.on("success", function(response) {
-				// Do transformation to array of Folder objects.
-				//response = stub.getFoldersResponse; // stub!
-				var folders = [];
-				for(var id in response.folders) {
-					folder = response.folders[id];
+				log(JSON.stringify(response));
+				/*var folders = [];
+				for(var id in response.result) {
+					folder = response.result[id];
 					folders.push(new Folder({
 						name   : folder.name, 
 						id     : folder.id,
@@ -139,11 +134,11 @@ var MailBox = MailBox || function(options) {
 						unread : folder.unread,
 						mails  : folder.mails
 					}));
-				}
-				events.success(folders);
-			});
+				}*/
+				events.success(response.result);
+			} || noop);
 			request.on("error", events.error || noop);
-		}).send(options.endpoint + 'mail/?format=json');
+		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});
 	};
 	
 	/**
@@ -154,10 +149,8 @@ var MailBox = MailBox || function(options) {
 	 */
 	this.getMails = function(events, constraints) {
 		net.createHTTPRequest(function(request){
-			request.headers["Content-Length"] = 567;
-			request.write('getMails');
+			//request.write('getMails');
 			request.on("success", function(response) {
-				response = stub.getMailsResponse;
 				var mails = [];
 				for(var id in response.mails) {
 					var mail = response.mails[id];
@@ -172,19 +165,17 @@ var MailBox = MailBox || function(options) {
 				events.success(mails);
 			});
 			request.on("error", events.error || noop);
-		}).send(options.endpoint);
+		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});
 	};
 	
 	
 	this.getConfiguration = function(events) {
 		net.createHTTPRequest(function(request){
 			
-		}).send(options.endpoint);
+		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});
 	};
 	
 };
 
 
 exports.MailBox = MailBox;
-
-//}},['net','stub']);
