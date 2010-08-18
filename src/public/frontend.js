@@ -7,7 +7,7 @@ function log(msg)
 }
 
 var Navigator = {
-	getPath : function() {
+	getPath : function () {
 		var hash = location.hash;
 		if(!hash.match(/^#!\/.+\?/)) return; // TODO: error handling
 		var path = new String((/^#!\/.+\?/).exec(hash));
@@ -16,32 +16,59 @@ var Navigator = {
 	}
 };
 
-var InboxNavigationClass = function() {
+var InboxNavigationClass = function () {
 	var activeFolder = null;
 	var map = {};
 	
-	
-	
-	this.setFolders = function(folders) {
+	/**
+	 * 
+	 */
+	this.setFolders = function (folders) {
 		log("setFolders called.");
-		for(var id in folders) {
+
+		var specialFolders = {
+			'INBOX'  : null,
+			'DRAFTS' : null,
+			'SENT'   : null,
+			'SPAM'   : null,
+			'TRASH'  : null
+		};
+		
+		for (var id in folders) {
 			var folder = folders[id];
-			var where = (folder.type) ? "#special_folders .n.separator" : '#folders .n.separator'; 
-	
+		
 			var el = $('<li><img src="/images/placeholder.png"' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' alt="" /><a href="#!/' + folder.name + '/?">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
 			log('map['+'/'+folder.name+'] added');
 			map['/'+folder.name] = el;
-			el.insertBefore(where);
-	
-			// Click-function for Folders
+
+		
+			// Click-function for folders
 			el.click(function(event) {
 				log("folder '"+folder.name+"' clicked.");
 				setActiveView($('#view_folders'));
 			});
+
+			// Ordering of special folders.
+			if (folder.type) {
+				specialFolders[folder.type] = el;
+				continue;
+			}
+			
+			// 
+			el.insertBefore('#folders .n.separator');
+		}
+		
+		// Ordering of special folders.
+		for (var id in specialFolders) {
+			var el = specialFolders[id];
+			el.insertBefore('#special_folders .n.separator');
 		}
 	};
 	
-	this.update = function() {
+	/**
+	 * 
+	 */
+	this.update = function () {
 		var path = Navigator.getPath();
 		if (activeFolder)
 			map[activeFolder].removeClass('active');
@@ -108,6 +135,8 @@ function setActiveView(view) {
 		activeView.show();
 	}
 }
+
+
 
 function startFrontend() {
 	var activeSuggestion = $('#suggest ul li:first');
