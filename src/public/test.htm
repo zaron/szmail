@@ -53,7 +53,7 @@ function eRun(msg) {
 			output += '<p>Request: '+ev+'</p>';
 			var result = json.stringify(result);
 			while(result.search(/\\u000a/) != -1)result = result.replace(/\\u000a/,'<br/>')
-			output += '<div style="padding:5px; border:1px solid green">'+result+'</div>';
+			output += '<pre style="padding:5px; border:1px solid green">'+result+'</pre>';
 		}
 	} catch(e) {
 		output += 'Exception: '+e;
