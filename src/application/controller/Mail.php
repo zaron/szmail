@@ -26,99 +26,108 @@ class Controller_Mail {
 		'Gesendet'     => 'SENT',
 		'Spam'         => 'SPAM',
 		'Entw&APw-rfe' => 'DRAFTS'
-	);
+		);
 
-	/**
-	 * Returns the folders'
-	 *
-	 * {[{
-	 *     "" : "" //
-	 *   }, ...]}
-	 *
-	 * @param  string $folder
-	 * @param  int    $offset
-	 * @return array
-	 */
-	public function getMails($folder = 'INBOX', $offset = 0)
-	{
-		$mail = $this::getMailbox();
-		$paginator = $mail->getPaginator(15, $folder);
-		$mails = array ();
-		return $mails;
-	}
+		/**
+		 * Returns the folders'
+		 *
+		 * {[{
+		 *     "" : "" //
+		 *   }, ...]}
+		 *
+		 * @param  string $folder
+		 * @param  int    $offset
+		 * @return array
+		 */
+		public function getMails($folder = 'INBOX', $offset = 0)
+		{
+			$mail = $this::getMailbox();
+			$paginator = $mail->getPaginator(15, $folder);
+			$mails = array ();
+			return $mails;
+		}
 
-	/**
-	 * Returns an email
-	 *
-	 * {
-	 *     "headers" : {
-	 *                   "id"      : "",   // 
-	 *                   "date"    : "",   // 
-	 *                   "subject" : "",   // 
-	 *                   "from"    : "",   // 
-	 *                   "to"      : [""], // 
-	 *                   "cc"      : [""], // 
-	 *                   "bcc"     : [""], // 
-	 *                   "replyTo" : "id"  //
-	 *                 },
-	 *     "body" : {
-	 *                "text" : "",
-	 *                "html" : "",
-	 *                "attachments" : [
-	 *                  {
-	 *                    "name"      : "",
-	 *                    "id"        : 1234,
-	 *                    "mime-type" : "image/png"
-	 *                  }, ... ]
-	 *              },
-	 * }
-	 *
-	 * @param  string $root
-	 * @return array
-	 */
-	public function getMail($id)
-	{
-	}
+		/**
+		 * Returns an email
+		 *
+		 * {
+		 *     "headers" : {
+		 *                   "id"      : "",   //
+		 *                   "date"    : "",   //
+		 *                   "subject" : "",   //
+		 *                   "from"    : "",   //
+		 *                   "to"      : [""], //
+		 *                   "cc"      : [""], //
+		 *                   "bcc"     : [""], //
+		 *                   "replyTo" : "id"  //
+		 *                 },
+		 *     "body" : {
+		 *                "text" : "",
+		 *                "html" : "",
+		 *                "attachments" : [
+		 *                  {
+		 *                    "name"      : "",
+		 *                    "id"        : 1234,
+		 *                    "mime-type" : "image/png"
+		 *                  }, ... ]
+		 *              },
+		 * }
+		 *
+		 * @param  string $root
+		 * @return array
+		 */
+		public function getMail($id)
+		{
+		}
 
-	/**
-	 * Returns the folders
-	 *
-	 * {[{
-	 *     "name"   : "FolderName", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
-	 *     "global" : "/top/sub", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
-	 *     "type"   : "",           // one of INBOX, DRAFTS, SENT, SPAM, TRASH or not set
-	 *     "flags"  : [...],        // array with NOINFERIORS, NOSELECT, MARKED, UNMARKED or not set.
-	 *     "mails"  : 1234          // integer value
-	 *     "unread" : 1234          // integer value  
-	 *   }, ...]}
-	 *
-	 * @param  string $root
-	 * @return array
-	 */
-	public function getFolders($root = '')
-	{
-		$mail = $this::getMailbox();
-		$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
-		foreach ($folderIterator as $localName => $folder) {
-			$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
-			$mails = $mail->countMessages($folder->getGlobalName());
-			$type = '';
-			if(isset($this->map[$localName]))
-			{
-				$type = $this->map[$localName];
-			}
-			$folders[] = array(
+		/**
+		 * Returns the folders
+		 *
+		 * {[{
+		 *     "name"   : "FolderName", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
+		 *     "global" : "/top/sub", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
+		 *     "type"   : "",           // one of INBOX, DRAFTS, SENT, SPAM, TRASH or not set
+		 *     "flags"  : [...],        // array with NOINFERIORS, NOSELECT, MARKED, UNMARKED or not set.
+		 *     "mails"  : 1234          // integer value
+		 *     "unread" : 1234          // integer value
+		 *   }, ...]}
+		 *
+		 * @param  string $root
+		 * @return array
+		 */
+		public function getFolders($root = '')
+		{
+			$mail = $this::getMailbox();
+			$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
+			foreach ($folderIterator as $localName => $folder) {
+				$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
+				$mails = $mail->countMessages($folder->getGlobalName());
+				$type = '';
+				if(isset($this->map[$localName]))
+				{
+					$type = $this->map[$localName];
+				}
+				$folders[] = array(
         		"name" => $localName,
 				"type" => $type,
 				"mails" => $mails,
 				"unread" => ($mails - $seen)
-			);
-		};
-		return  $folders;
-	}
+				);
+			};
+			return  $folders;
+		}
 
+		/**
+		 * test
+		 *
+		 * @param string $a
+		 * @return string
+		 */
+		public function fooBar($a = '') {
+			return print_r($this::getMail()->foobar(),true);
+		}
 
-	private function getMailbox() {
-		return new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig());;
-	}
+		private function getMailbox() {
+			return new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig(1));;
+		}
 }

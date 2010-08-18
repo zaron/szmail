@@ -25,6 +25,7 @@ class SZ_Setting_Manager {
 			$session = SZ_Session_Manager::getSession();
 			$userId = $session->userId;
 		}
+		
 		$db = Zend_Registry::get('db');
 		$select = new Zend_Db_Select($db);
 
