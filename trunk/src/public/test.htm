@@ -51,7 +51,9 @@ function eRun(msg) {
 			output += json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request);
 		} else {
 			output += '<p>Request: '+ev+'</p>';
-			output += '<div style="padding:5px; border:1px solid green">'+(json.stringify(result)).replace('\\u000a','<br />')+'</div>';
+			var result = json.stringify(result);
+			while(result.search(/\\u000a/) != -1)result = result.replace(/\\u000a/,'<br/>')
+			output += '<div style="padding:5px; border:1px solid green">'+result+'</div>';
 		}
 	} catch(e) {
 		output += 'Exception: '+e;
@@ -65,7 +67,7 @@ $(function() {
 	con.keypress(function(event) {
 		if(event.keyCode == 13) {
 			eRun(con.val());
-			con.val('');
+			//con.val('')
 		}
 	});
 	require.reset();
