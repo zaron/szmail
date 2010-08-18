@@ -40,20 +40,23 @@ function log_frontend(msg) {
 });*/
 
 function eRun(msg) {
-	msg = $.trim(msg);
 	var client = jQuery.Zend.jsonrpc({url: 'rpc.php'});
-	var ev = 'var result = client.'+msg+';';
-	//alert(ev);
+	var ev = 'var result = client.'+$.trim(msg)+';';
+	var output = '';
 	try {
+		
 		eval(ev);
+		
 		if(client.error != 0) {
-			log_frontend(json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request));
+			output += json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request);
 		} else {
-			log_frontend(ev+' <br />result : '+json.stringify(result));
+			output += '<p>Request: '+ev+'</p>';
+			output += '<div style="padding:5px; border:1px solid green">'+json.stringify(result)+'</div>';
 		}
 	} catch(e) {
-		log_frontend(e);
+		output += 'Exception: '+e;
 	}
+	$("#debug").prepend('<div style="padding:5px; border:1px solid black;margin-bottom:10px;">'+output+'</div>');
 }
 
 	 
@@ -79,9 +82,10 @@ $(function() {
 <!--
 <div>method:<input type="text" id="method" />(<input type="text" id="arg1" />,<input type="text" id="arg2" />,<input type="text" id="arg3" />) <button id="invoke">invoke</button></div>
 -->
-<div><input type="text" id="console" style="width:100%;height:40px;padding:5px;" /></div>
+<div><input type="text" id="console" style="width:100%;height:40px;padding:5px;font-size:130%;" /></div>
 <hr />
-<div id="debug"></div>
+<div id="debug">
+</div>
 </body>
 
 </html>
