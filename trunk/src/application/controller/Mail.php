@@ -41,10 +41,43 @@ class Controller_Mail {
 	 */
 	public function getMails($folder = 'INBOX', $offset = 0)
 	{
-		$mail = $this::getMail();
+		$mail = $this::getMailbox();
 		$paginator = $mail->getPaginator(15, $folder);
 		$mails = array ();
 		return $mails;
+	}
+
+	/**
+	 * Returns an email
+	 *
+	 * {
+	 *     "headers" : {
+	 *                   "id"      : "",   // 
+	 *                   "date"    : "",   // 
+	 *                   "subject" : "",   // 
+	 *                   "from"    : "",   // 
+	 *                   "to"      : [""], // 
+	 *                   "cc"      : [""], // 
+	 *                   "bcc"     : [""], // 
+	 *                   "replyTo" : "id"  //
+	 *                 },
+	 *     "body" : {
+	 *                "text" : "",
+	 *                "html" : "",
+	 *                "attachments" : [
+	 *                  {
+	 *                    "name"      : "",
+	 *                    "id"        : 1234,
+	 *                    "mime-type" : "image/png"
+	 *                  }, ... ]
+	 *              },
+	 * }
+	 *
+	 * @param  string $root
+	 * @return array
+	 */
+	public function getMail($id)
+	{
 	}
 
 	/**
@@ -64,7 +97,7 @@ class Controller_Mail {
 	 */
 	public function getFolders($root = '')
 	{
-		$mail = $this::getMail();
+		$mail = $this::getMailbox();
 		$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
 		foreach ($folderIterator as $localName => $folder) {
 			$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
@@ -85,7 +118,7 @@ class Controller_Mail {
 	}
 
 
-	private function getMail() {
+	private function getMailbox() {
 		return new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig());;
 	}
 }
