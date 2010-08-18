@@ -124,7 +124,7 @@ class Controller_Mail {
 		 * @return string
 		 */
 		public function fooBar($a = '') {
-			return print_r($this::getMail()->foobar(),true);
+			return print_r($this::getMailbox()->foobar(),true);
 		}
 
 		private function getMailbox() {

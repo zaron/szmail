@@ -53,7 +53,7 @@ class SZ_Mail_Manager_Imap {
 	}
 	
 	public function foobar() {
-		return $this->getList(0,10);
+		return $this->getFolders();
 	}
 	
 	public function getMail() {
