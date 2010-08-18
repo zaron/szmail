@@ -52,7 +52,7 @@ function eRun(msg) {
 		} else {
 			output += '<p>Request: '+ev+'</p>';
 			var result = json.stringify(result);
-			while(result.search(/\\u000a/) != -1)result = result.replace(/\\u000a/,'<br/>')
+			result = result.replace(/\\u000a/g,'<br/>')
 			output += '<pre style="padding:5px; border:1px solid green">'+result+'</pre>';
 		}
 	} catch(e) {
