@@ -29,7 +29,11 @@ class Controller_Mail {
 	);
 
 	/**
-	 * Returns the folders
+	 * Returns the folders'
+	 *
+	 * {[{
+	 *     "" : "" //
+	 *   }, ...]}
 	 *
 	 * @param  string $folder
 	 * @param  int    $offset
@@ -39,20 +43,21 @@ class Controller_Mail {
 	{
 		$mail = $this::getMail();
 		$paginator = $mail->getPaginator(15, $folder);
-		$mails = array(); 
-		/*foreach ($paginator as $email) {
-			$mails[] = array(
-        		"name" => $localName,
-				"type" => $type,
-				"mails" => $mails,
-				"unread" => ($mails - $seen)
-			);
-		}*/
-		return $paginator;
+		$mails = array ();
+		return $mails;
 	}
 
 	/**
 	 * Returns the folders
+	 *
+	 * {[{
+	 *     "name"   : "FolderName", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
+	 *     "global" : "/top/sub", // UTF-8 encoded (no ASCII, no UTF-7, etc.)
+	 *     "type"   : "",           // one of INBOX, DRAFTS, SENT, SPAM, TRASH or not set
+	 *     "flags"  : [...],        // array with NOINFERIORS, NOSELECT, MARKED, UNMARKED or not set.
+	 *     "mails"  : 1234          // integer value
+	 *     "unread" : 1234          // integer value  
+	 *   }, ...]}
 	 *
 	 * @param  string $root
 	 * @return array
