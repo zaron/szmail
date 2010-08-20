@@ -80,6 +80,7 @@ class SZ_Mail_Storage_Imap extends Zend_Mail_Storage_Imap {
 		}
 		return array_reverse($result);
 	}
+	
 
 	private function extract() {
 

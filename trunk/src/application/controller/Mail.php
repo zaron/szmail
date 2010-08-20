@@ -45,9 +45,10 @@ class Controller_Mail {
 		 * @param  int    $offset
 		 * @return array
 		 */
-		public function getMails($folder = 'INBOX', $offset = 0, $items = 15) {
-			$mail = $this::getMailbox();
-			return $mail->getList(0, 15);
+		public function getMails($folder = 'INBOX', $offset = 1, $items = 15) {
+			$mail = self::getMailbox();
+			$mail->selectFolder($folder);
+			return $mail->getList($offset, $items);
 		}
 
 		/**
