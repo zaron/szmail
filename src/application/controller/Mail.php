@@ -31,6 +31,12 @@ class Controller_Mail {
 		/**
 		 * Returns the folders'
 		 *
+		 *	attachments
+		 *  id 
+		 *  subject 
+		 *  from
+		 *  date
+		 *  size
 		 * {[{
 		 *     "" : "" //
 		 *   }, ...]}
@@ -39,12 +45,9 @@ class Controller_Mail {
 		 * @param  int    $offset
 		 * @return array
 		 */
-		public function getMails($folder = 'INBOX', $offset = 0)
-		{
+		public function getMails($folder = 'INBOX', $offset = 0, $items = 15) {
 			$mail = $this::getMailbox();
-			$paginator = $mail->getPaginator(15, $folder);
-			$mails = array ();
-			return $mails;
+			return $mail->getList(0, 15);
 		}
 
 		/**
