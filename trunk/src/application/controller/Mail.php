@@ -20,14 +20,6 @@
 
 class Controller_Mail {
 
-	private $map = array(
-		'INBOX'        => 'INBOX',
-		'Papierkorb'   => 'TRASH',
-		'Gesendet'     => 'SENT',
-		'Spam'         => 'SPAM',
-		'Entw&APw-rfe' => 'DRAFTS'
-		);
-
 		/**
 		 * Returns the folders'
 		 *
@@ -80,8 +72,8 @@ class Controller_Mail {
 		 * @param  string $root
 		 * @return array
 		 */
-		public function getMail($id)
-		{
+		public function getMail($id) {
+			return self::getMailBox()->getMessage($id);
 		}
 
 		/**
@@ -99,27 +91,9 @@ class Controller_Mail {
 		 * @param  string $root
 		 * @return array
 		 */
-		public function getFolders($root = '')
-		{
-			$mail = $this::getMailbox();
-			$folderIterator = new RecursiveIteratorIterator($mail->getFolders(), RecursiveIteratorIterator::SELF_FIRST);
-			foreach ($folderIterator as $localName => $folder) {
-				$seen = $mail->countMessages($folder->getGlobalName(),array(Zend_Mail_Storage::FLAG_SEEN));
-				$mails = $mail->countMessages($folder->getGlobalName());
-				$type = '';
-				if(isset($this->map[$localName]))
-				{
-					$type = $this->map[$localName];
-				}
-				$folders[] = array(
-        		"name" => $localName,
-				"type" => $type,
-				"mails" => $mails,
-				"unread" => ($mails - $seen),
-				"global" => $folder->getGlobalName()
-				);
-			};
-			return  $folders;
+		public function getFolders($root = null) {
+			$mail = self::getMailbox();
+			return $mail->getFolders($root);
 		}
 
 		/**
