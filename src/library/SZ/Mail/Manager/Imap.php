@@ -37,11 +37,11 @@ class SZ_Mail_Manager_Imap {
 		if($folder !== null) {
 			$count = 'n/a';
 			try {
-				$this->mail->selectFolder($folder);
+				$this->selectFolder($folder);
 				if($flags !== null) $count = $this->mail->countMessages($flags);
 				else $count = $this->mail->count();
 			} catch(Exception $e){}
-			$this->mail->selectFolder(self::DEFAULT_FOLDER);
+			$this->selectFolder();
 			return $count;
 		}
 		if($this->count == -1) {
@@ -55,15 +55,14 @@ class SZ_Mail_Manager_Imap {
 	}
 
 	public function foobar() {
-		$this->mail->setFolder
-		return $this->getList(0,5);
+		$this->selectFolder();
+		return $this->mail->getMessagesWithUid(array(0,1));
 	}
 
 	public function getMail() {
 	}
 
 	public function getList($from, $to) {
-
 		$smaller = ($from>$to)? $to:$from;
 		$bigger = ($from>$to)? $from:$to;
 
@@ -88,7 +87,7 @@ class SZ_Mail_Manager_Imap {
 	
 
 	public function getMessage($uid, $folder = self::DEFAULT_FOLDER) {
-		$this->mail->selectFolder($folder);
+		$this->selectFolder($folder);
 		$message = $this->mail->getMessageByUid($uid);
 		$result = $this->getMainInfoFromMessage($message);
 
@@ -111,7 +110,7 @@ class SZ_Mail_Manager_Imap {
 		return $paginator;
 	}
 
-	public function sendMail($info,$isAnwser = false) {
+	public function sendMail($info, $isAnwser = false) {
 		if(is_array($info)) {
 			$info = (object) $info;
 		} else if(!is_object($info)) {
