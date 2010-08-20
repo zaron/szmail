@@ -11,63 +11,9 @@
 <script type="text/javascript" src="frontend.js"></script>
 
 <script type="text/javascript"> 
-	function doIframe() {
-		o = document.getElementsByTagName('iframe');
-		for (i = 0; i < o.length; i++) {
-			setHeight(o[i]);
-			addEvent(o[i], 'load', doIframe);
-		}
-	}
-
-	function setHeight(e) {
-		if (e.contentDocument) {
-			e.height = e.contentDocument.body.offsetHeight + 35;
-		} else {
-			e.height = e.contentWindow.document.body.scrollHeight;
-		}
-	}
-
-	function addEvent(obj, evType, fn) {
-		if (obj.addEventListener) {
-			obj.addEventListener(evType, fn, false);
-			return true;
-		} else if (obj.attachEvent) {
-			var r = obj.attachEvent("on" + evType, fn);
-			return r;
-		} else {
-			return false;
-		}
-	}
-
-var mb;
 $(function() {
-	require.reset();
-	//require.useScriptTags(); // for local testing only
-	require.setModuleRoot('modules');
-	require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
-		var MailBox = require('mailbox').MailBox;
-		mb = new MailBox({"endpoint": '/rpc'});
-		mb.getFolders( [], {
-			'success' : function(folders) {
-				InboxNavigation.setFolders(folders);
-				$(window).trigger('hashchange'); // Update selected folder.
-			},
-			'error' : function(error) {
-			}
-		});
-	});
-	
-	$(window).bind('hashchange', function(event) {
-		log('hashchange event fired.');
-		InboxNavigation.update();
-	});
-	$('.content').hide();
-	activeView = $('#view_mail');
-	activeView.show();
-	startFrontend();
-	doIframe();
+	Frontend.start();
 });
-
 </script>
 </head>
 <body>

@@ -1,22 +1,87 @@
 
-var activeView;
+
+
+function doIframe() {
+	o = document.getElementsByTagName('iframe');
+	for (i = 0; i < o.length; i++) {
+		setHeight(o[i]);
+		addEvent(o[i], 'load', doIframe);
+	}
+}
+
+function setHeight(e) {
+	if (e.contentDocument) {
+		e.height = e.contentDocument.body.offsetHeight + 35;
+	} else {
+		e.height = e.contentWindow.document.body.scrollHeight;
+	}
+}
+
+function addEvent(obj, evType, fn) {
+	if (obj.addEventListener) {
+		obj.addEventListener(evType, fn, false);
+		return true;
+	} else if (obj.attachEvent) {
+		var r = obj.attachEvent("on" + evType, fn);
+		return r;
+	} else {
+		return false;
+	}
+}
 
 function log(msg)
 {
 	$('#debug').prepend(msg+'<br/>');
 }
 
-var Navigator = {
-	getPath : function () {
+var Navigator = new (function () {
+	
+	var activeView = $('#view_mail');
+	activeView.show();
+	
+	var lastPath;
+	
+	this.getPath = function () {
 		var hash = location.hash;
 		if(!hash.match(/^#!\/.+\?/)) return; // TODO: error handling
 		var path = new String((/^#!\/.+\?/).exec(hash));
 		path = path.substr(2);
 		return path.substr(0,path.length-2);
+	};
+	
+	this.getParam = function(param) {
+		var hash = location.hash;
+		if(hash.indexOf('?') == hash.length) return; // TODO: error handling
+		var path = this.getPath();
+		
+	};
+	
+	this.update = function () {
+		var path = this.getPath();
+		if(lastPath == path) return;
+		lastPath = path;
+		
+		FolderList.update(path);
+	};
+	
+	this.setActiveView = function (view) {
+		if (activeView != view) {
+			activeView.hide();
+			activeView = view;
+			activeView.show();
+		}
 	}
-};
 
-var InboxNavigation = new (function(){
+	
+})();
+
+var MailboxCache = new (function () {
+	this.hasMail = function (folder,uid) {
+		
+	};
+})();
+
+var FolderList = new (function () {
 	var activeFolder = null;
 	var map = {};
 	
@@ -25,7 +90,14 @@ var InboxNavigation = new (function(){
 	 */
 	this.setFolders = function (folders) {
 		log("setFolders called.");
-
+		var specialFolderNames = {
+				'INBOX'  : "Posteingang",
+				'DRAFTS' : "Entwürfe",
+				'SENT'   : "Gesendet",
+				'SPAM'   : "Spam",
+				'TRASH'  : "Papierkorb"
+		};
+		
 		var specialFolders = {
 			'INBOX'  : null,
 			'DRAFTS' : null,
@@ -37,15 +109,15 @@ var InboxNavigation = new (function(){
 		for (var id in folders) {
 			var folder = folders[id];
 		
-			var el = $('<li><img src="/images/placeholder.png"' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' alt="" /><a href="#!/' + folder.global + '/?">' + folder.name + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
+			var el = $('<li><img src="/images/placeholder.png"' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' alt="" /><a href="#!/' + folder.global + '/?">' + ((folder.type) ? specialFolderNames[folder.type] : folder.name) + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
 			log('map['+folder.global+'] added');
 			map["/" + folder.global] = el;
 		
 			// Click-function for folders
-			(function(folder){
-				el.click(function(event) {
+			(function (folder){
+				el.click(function (event) {
 					log("folder '"+folder.global+"' clicked.");
-					mb.getMails( [folder.global], {
+					MailBox.getMails( [folder.global], {
 						'success' : function(mails) {
 							InboxView.setMails(mails);
 						},
@@ -69,20 +141,17 @@ var InboxNavigation = new (function(){
 			el.insertBefore('#special_folders .n.separator');
 		}
 	};
-	
-	/**
-	 * 
-	 */
-	this.update = function () {
-		var path = Navigator.getPath();
+
+	this.update = function (path) {
 		if (activeFolder && activeFolder != path) {
 			map[activeFolder].removeClass('active');
-			setActiveView($('#view_folders'));
+			Navigator.setActiveView($('#view_folders'));
 		}
 		activeFolder = path;
 		map[activeFolder].addClass('active');
 		log('InboxNavigation updated.');
 	};
+	
 })();
 
 var InboxView = new (function () {
@@ -109,7 +178,7 @@ var InboxView = new (function () {
 			map[mail.uid] = el;
 			el.click(function(event) {
 				log("mail clicked.");
-				setActiveView($('#view_mail'));				
+				Navigator.setActiveView($('#view_mail'));				
 			});
 			el.appendTo($('#mail_table tbody'));
 		}
@@ -142,33 +211,55 @@ var MailView = new (function () {
 	
 })();
 
-function setActiveView(view) {
-	if (activeView != view) {
-		activeView.hide();
-		activeView = view;
-		activeView.show();
-	}
-}
+var Frontend = new (function () {
+	var started = false;
 
+	this.start = function () {
+		if(started) return; // TODO: Error handling?
+		
+		require.reset();
+		require.setModuleRoot('modules');
+		require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
+			var mailbox = require('mailbox');
+			MailBox = new mailbox.MailBox({"endpoint": '/rpc'});
+			MailBox.getFolders( [], {
+				'success' : function (folders) {
+					FolderList.setFolders(folders);
+					$(window).trigger('hashchange'); // Update selected folder.
+				},
+				'error' : function (error) {}
+			});
+		});
 
+		$(window).bind('hashchange', function(event) {
+			log('hashchange event fired.');
+			Navigator.update();
+			
+		});
+		
+		$('.content').hide();
 
-function startFrontend() {
-	var activeSuggestion = $('#suggest ul li:first');
-	activeSuggestion.toggleClass('active');
-	$('#searchbox').keydown(function(event) {
-		if (event.keyCode == '13') {
-			event.preventDefault();
-		} else if (event.keyCode == '38') { // arrow up
-			activeSuggestion.toggleClass('active');
-		} else if (event.keyCode == '40') { // arrow down
+		
+		// TODO: Make Universalbar object that manages this shit.
+		var activeSuggestion = $('#suggest ul li:first');
+		activeSuggestion.toggleClass('active');
+		$('#searchbox').keydown(function(event) {
+			if (event.keyCode == '13') {
+				event.preventDefault();
+			} else if (event.keyCode == '38') { // arrow up
+				activeSuggestion.toggleClass('active');
+			} else if (event.keyCode == '40') { // arrow down
 
-		}
+			}
 
-	});
-	$('#searchbox').focus(function(event) {
-		$('#suggest').slideDown('normal');
-	});
-	$('#searchbox').blur(function(event) {
-		$('#suggest').slideUp('normal');
-	});
-};
+		});
+		$('#searchbox').focus(function(event) {
+			$('#suggest').slideDown('normal');
+		});
+		$('#searchbox').blur(function(event) {
+			$('#suggest').slideUp('normal');
+		});
+	};
+})();
+
+var MailBox;
