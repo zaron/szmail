@@ -20,6 +20,8 @@
 
 class SZ_Mail_Manager_Imap {
 
+	const DEFAULT_FOLDER = 'INBOX';
+
 	private $mail;
 
 	private $count = -1;
@@ -39,7 +41,7 @@ class SZ_Mail_Manager_Imap {
 				if($flags !== null) $count = $this->mail->countMessages($flags);
 				else $count = $this->mail->count();
 			} catch(Exception $e){}
-			$this->mail->selectFolder('INBOX');
+			$this->mail->selectFolder(self::DEFAULT_FOLDER);
 			return $count;
 		}
 		if($this->count == -1) {
@@ -51,11 +53,12 @@ class SZ_Mail_Manager_Imap {
 	function getFolders($root = NULL) {
 		return $this->mail->getFolders($root);
 	}
-	
+
 	public function foobar() {
-		return $this->getFolders();
+		$this->mail->setFolder
+		return $this->getList(0,5);
 	}
-	
+
 	public function getMail() {
 	}
 
@@ -79,6 +82,57 @@ class SZ_Mail_Manager_Imap {
 		return $result;
 	}
 
+	public function selectFolder($folder = self::DEFAULT_FOLDER) {
+		$this->mail->selectFolder($folder);
+	}
+	
+
+	public function getMessage($uid, $folder = self::DEFAULT_FOLDER) {
+		$this->mail->selectFolder($folder);
+		$message = $this->mail->getMessageByUid($uid);
+		$result = $this->getMainInfoFromMessage($message);
+
+		if($message->isMultiPart()) {
+			foreach($message as $part) {
+				$result = $this->getInfofromPart($part,$result);
+			}
+		} else {
+			$result = $this->getInfofromPart($message,$result);
+		}
+		return $result;
+	}
+
+
+	public function getPaginator($default, $folder = self::DEFAULT_FOLDER) {
+		$this->selectFolder($folder);
+		$paginator = new Zend_Paginator(new SZ_Paginator_Adapter_Mail($this));
+		$paginator->setItemCountPerPage($default);
+		$paginator->setCacheEnabled(false);
+		return $paginator;
+	}
+
+	public function sendMail($info,$isAnwser = false) {
+		if(is_array($info)) {
+			$info = (object) $info;
+		} else if(!is_object($info)) {
+			throw new SZ_Exception("");
+		}
+		$identity = SZ_Setting_Manager::getIdentity($info->identity);
+		$mail = new Zend_Mail();
+		$this->addReceiver($mail,"addTo",$info->to);
+		$this->addReceiver($mail,"addCc",$info->cc);
+		$this->addReceiver($mail,"addBcc",$info->bcc,false);
+		$mail->setSubject($info->subject);
+		$mail->setBodyText($info->content);
+
+		if($isAnwser === true) {
+			// TODO fetch mail and set respective "in reply to" and "references" headers
+		}
+
+		$identity->send($mail);
+		//TODO copy mail to send folder
+	}
+	
 	private function getMainInfoFromMessage(SZ_Mail_Message $msg) {
 		$result = array();
 		$result['uid'] = $msg->getUniqueId();
@@ -107,22 +161,7 @@ class SZ_Mail_Manager_Imap {
 
 		return $result;
 	}
-
-	public function getMessage($uid, $folder) {
-		$this->mail->selectFolder($folder);
-		$message = $this->mail->getMessageByUid($uid);
-		$result = $this->getMainInfoFromMessage($message);
-
-		if($message->isMultiPart()) {
-			foreach($message as $part) {
-				$result = $this->getInfofromPart($part,$result);
-			}
-		} else {
-			$result = $this->getInfofromPart($message,$result);
-		}
-		return $result;
-	}
-
+	
 	private function getInfofromPart($part, $result) {
 		$contentType = $part->headerExists('content-type')?$part->getHeader('content-type'):'';
 		$transferEncoding =  $part->headerExists('content-transfer-encoding')?$part->getHeader('content-transfer-encoding'):'';
@@ -180,36 +219,6 @@ class SZ_Mail_Manager_Imap {
 		}
 		if(mb_check_encoding($str, 'UTF-8')) return $str;
 		return utf8_encode($str);
-	}
-
-	public function getPaginator($default, $folder = "INBOX") {
-		$this->mail->selectFolder($folder);
-		$paginator = new Zend_Paginator(new SZ_Paginator_Adapter_Mail($this));
-		$paginator->setItemCountPerPage($default);
-		$paginator->setCacheEnabled(false);
-		return $paginator;
-	}
-
-	public function sendMail($info,$isAnwser = false) {
-		if(is_array($info)) {
-			$info = (object) $info;
-		} else if(!is_object($info)) {
-			throw new SZ_Exception("");
-		}
-		$identity = SZ_Setting_Manager::getIdentity($info->identity);
-		$mail = new Zend_Mail();
-		$this->addReceiver($mail,"addTo",$info->to);
-		$this->addReceiver($mail,"addCc",$info->cc);
-		$this->addReceiver($mail,"addBcc",$info->bcc,false);
-		$mail->setSubject($info->subject);
-		$mail->setBodyText($info->content);
-
-		if($isAnwser === true) {
-			// TODO fetch mail and set respective "in reply to" and "references" headers
-		}
-
-		$identity->send($mail);
-		//TODO copy mail to send folder
 	}
 
 	private function addReceiver($mail,$method,$receiver,$useName = true) {
