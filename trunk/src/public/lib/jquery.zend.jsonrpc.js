@@ -107,7 +107,7 @@ jQuery.Zend.jsonrpc = function(options) {
                         }else{
                             var tosend = {jsonrpc: '2.0',method: key,params: params,id: id};
                         }
-                        
+                        log("Sending: " + JSON.stringify(tosend),'JQRPC');
                         /* AJAX away! */
                         jQuery.ajax({
                             async: self.options.async,
@@ -119,6 +119,7 @@ jQuery.Zend.jsonrpc = function(options) {
                             cache: false,
                             data: JSON.stringify(tosend),
                             error: function(req,stat,err){
+                        		log("Received: " + JSON.stringify(req),'JQRPC');
                                 self.error = true;
                                 self.error_message = stat;
                                 self.error_request = req;
