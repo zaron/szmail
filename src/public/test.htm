@@ -8,7 +8,7 @@
 <script type="text/javascript" src="lib/yabble.js"></script>
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/jquery.zend.jsonrpc.js"></script>
-<script type="text/javascript" src="lib/json2.js"></script>
+<!-- <script type="text/javascript" src="lib/json2.js"></script>  -->
 <script type="text/javascript">
 function log(msg,level){
 	$('#debug').prepend("<span class=\""+level+"\">"+(new Date()) +" :" +msg + '</span><br/>');
@@ -51,7 +51,10 @@ function eRun(msg) {
 			output += json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request);
 		} else {
 			output += '<p>Request: '+ev+'</p>';
-			var result = json.stringify(result);
+			alert(typeof result);
+			if(typeof result != 'string') {
+				result = json.stringify(result, true,'\t');
+			} 
 			result = result.replace(/\\u000a/g,'<br/>')
 			output += '<pre style="padding:5px; border:1px solid green">'+result+'</pre>';
 		}

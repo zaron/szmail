@@ -2,7 +2,7 @@
  * This is a port of Dojo's JSON module
  */
 
-if(typeof JSON === "undefined"){
+//if(typeof JSON === "undefined"){
 exports.parse = function(/*String*/ json){
 	// summary:
 	// 		Parses a [JSON](http://json.org) string to return a JavaScript object.
@@ -124,19 +124,19 @@ exports.stringify = function(/*Object*/ it, /*Boolean?*/ prettyPrint, /*String?*
 	}
 	return "{" + output.join("," + sep) + newLine + _indentStr + "}"; // String
 };
-}
-else{
-	exports.parse = function(/*String*/ json){
-		// summary:
-		// 		Parses a [JSON](http://json.org) string to return a JavaScript object.
-		// description:
-		// 		Throws for invalid JSON strings, but it does not use a strict JSON parser. It
-		// 		delegates to eval().
-		// json: 
-		//		a string literal of a JSON item, for instance:
-		//			`'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'`
-
-		return eval("(" + json + ")"); // Object
-	};
-	exports.stringify = JSON.stringify;
-}
+//}
+//else{
+//	exports.parse = function(/*String*/ json){
+//		// summary:
+//		// 		Parses a [JSON](http://json.org) string to return a JavaScript object.
+//		// description:
+//		// 		Throws for invalid JSON strings, but it does not use a strict JSON parser. It
+//		// 		delegates to eval().
+//		// json: 
+//		//		a string literal of a JSON item, for instance:
+//		//			`'{ "foo": [ "bar", 1, { "baz": "thud" } ] }'`
+//
+//		return eval("(" + json + ")"); // Object
+//	};
+//	exports.stringify = JSON.stringify;
+//}
