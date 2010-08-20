@@ -51,7 +51,6 @@ function eRun(msg) {
 			output += json.stringify(client.error_message)+'<br />'+json.stringify(client.error_request);
 		} else {
 			output += '<p>Request: '+ev+'</p>';
-			alert(typeof result);
 			if(typeof result != 'string') {
 				result = json.stringify(result, true,'\t');
 			} 
