@@ -56,10 +56,10 @@ class SZ_Mail_Manager_Imap {
 
 	public function foobar() {
 		$this->selectFolder();
-		return $this->mail->getMessage(1);
 	}
 
 	public function getMail() {
+		
 	}
 
 	public function getList($from, $to) {

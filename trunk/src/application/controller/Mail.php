@@ -115,7 +115,8 @@ class Controller_Mail {
         		"name" => $localName,
 				"type" => $type,
 				"mails" => $mails,
-				"unread" => ($mails - $seen)
+				"unread" => ($mails - $seen),
+				"global" => $folder->getGlobalName()
 				);
 			};
 			return  $folders;
