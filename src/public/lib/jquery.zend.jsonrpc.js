@@ -119,7 +119,7 @@ jQuery.Zend.jsonrpc = function(options) {
                             cache: false,
                             data: JSON.stringify(tosend),
                             error: function(req,stat,err){
-                        		log("Received: " + req,'JQRPC');
+                        		log("Received: " + req.responseText,'JQRPC');
                                 self.error = true;
                                 self.error_message = stat;
                                 self.error_request = req;
