@@ -39,13 +39,14 @@
 		}
 	}
 
+var mb;
 $(function() {
 	require.reset();
 	//require.useScriptTags(); // for local testing only
 	require.setModuleRoot('modules');
 	require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
 		var MailBox = require('mailbox').MailBox;
-		var mb = new MailBox({"endpoint": '/rpc'});
+		mb = new MailBox({"endpoint": '/rpc'});
 		mb.getFolders( [], {
 			'success' : function(folders) {
 				InboxNavigation.setFolders(folders);
@@ -54,16 +55,6 @@ $(function() {
 			'error' : function(error) {
 			}
 		});
-
-/*		mb.getMails( {
-			'success' : function(mails) {
-				for ( var id in mails) {
-					gui_addMail(mails[id]);
-				}
-			},
-			'error' : function(error) {
-			}
-		});*/
 	});
 	
 	$(window).bind('hashchange', function(event) {
@@ -132,7 +123,7 @@ $(function() {
     <div class="panel">
 		<div class="right"><div class="jqPlot" id="history_plot" style="height:89px; width:366px;"></div>
 	    </div>
-	    <div class="information left">
+	    <div id="view_mail_information" class="information left">
 	        <p class="received"><span class="header">Sent: </span><span>Name des Absenders</span></p>
 	        <p class="from"><span class="header">From: </span><span class="user_male">eMail-Adresse@des.Absenders</span></p>
 	        <p class="to"><span class="header">To: </span><span class="user_male">eMail-Adresse@der.Empfaenger</span></p>
