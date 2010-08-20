@@ -41,18 +41,6 @@ class SZ_Mail_Storage_Imap extends Zend_Mail_Storage_Imap {
 		throw new Zend_Mail_Storage_Exception('unique id not found');
 		}*/
 
-	function getMessageWithUid($id) {
-		$data = $this->_protocol->fetch(array('UID','FLAGS', 'RFC822.HEADER'), $id);
-		$header = $data['RFC822.HEADER'];
-		$uid = $data['UID'];
-		$flags = array();
-		foreach ($data['FLAGS'] as $flag) {
-			$flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
-		}
-
-		return new $this->_messageClass(array('handler' => $this, 'uid' => $uid, 'id' => $id, 'headers' => $header, 'flags' => $flags));
-	}
-
 	function getMessageByUid($uid) {
 		$id = $this->getNumberByUniqueId($uid);
 		$data = $this->_protocol->fetch(array('UID','FLAGS', 'RFC822.HEADER'), $id);
@@ -66,7 +54,7 @@ class SZ_Mail_Storage_Imap extends Zend_Mail_Storage_Imap {
 		return new $this->_messageClass(array('handler' => $this, 'uid' => $_uid, 'id' => $id, 'headers' => $header, 'flags' => $flags));
 	}
 
-	function getMessagesWithUid($ids) {
+	function getMessagesWithUid(array $ids) {
 		$data = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER'), $ids);
 		$result = array();
 		foreach($data as $id => $message) {
@@ -80,9 +68,19 @@ class SZ_Mail_Storage_Imap extends Zend_Mail_Storage_Imap {
 		}
 		return array_reverse($result);
 	}
-	
+
+	private function getMessageWithUid($id) {
+		$data = $this->_protocol->fetch(array('UID','FLAGS', 'RFC822.HEADER'), $id);
+		$header = $data['RFC822.HEADER'];
+		$uid = $data['UID'];
+		$flags = array();
+		foreach ($data['FLAGS'] as $flag) {
+			$flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
+		}
+
+		return new $this->_messageClass(array('handler' => $this, 'uid' => $uid, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+	}
 
 	private function extract() {
-
 	}
 }
