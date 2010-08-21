@@ -64,6 +64,25 @@ var Navigator = new (function () {
 		FolderList.update(path);
 	};
 	
+	var waiting = false;
+	var waitingIntervalId = null;
+	var offset = 0;
+	this.toggleWaiting = function() {
+		var el = $('#searchbox');
+		if(!waiting) {
+			el.css("background","url(/images/indeterminate.png)");
+			waiting = true;
+			waitingIntervalId = setInterval(function(){
+				el.css("background-position","0px " + offset + "px");
+				offset = (offset + 4) % 178; 
+			},100);
+			return;
+		}
+		el.css("background","");
+		clearInterval(waitingIntervalId);
+		waiting = false;
+	};
+	
 	this.setActiveView = function (view) {
 		if (activeView != view) {
 			activeView.hide();
@@ -117,8 +136,10 @@ var FolderList = new (function () {
 			(function (folder){
 				el.click(function (event) {
 					log("folder '"+folder.global+"' clicked.");
+					Navigator.toggleWaiting();
 					MailBox.getMails( [folder.global], {
 						'success' : function(mails) {
+							Navigator.toggleWaiting();
 							InboxView.setMails(mails);
 						},
 						'error' : function(error) {}
@@ -222,9 +243,12 @@ var Frontend = new (function () {
 		require.ensure( [ 'json', 'net', 'mailbox' ], function(require) {
 			var mailbox = require('mailbox');
 			MailBox = new mailbox.MailBox({"endpoint": '/rpc'});
+
+			Navigator.toggleWaiting();
 			MailBox.getFolders( [], {
 				'success' : function (folders) {
 					FolderList.setFolders(folders);
+					Navigator.toggleWaiting();
 					$(window).trigger('hashchange'); // Update selected folder.
 				},
 				'error' : function (error) {}
