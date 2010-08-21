@@ -67,17 +67,19 @@ var Navigator = new (function () {
 	var waiting = false;
 	var waitingIntervalId = null;
 	var offset = 0;
-	this.toggleWaiting = function() {
+	this.toggleWaiting = function(msg) {
 		var el = $('#searchbox');
 		if(!waiting) {
+			el.val(msg);
 			el.css("background","url(/images/indeterminate.png)");
 			waiting = true;
 			waitingIntervalId = setInterval(function(){
 				el.css("background-position","0px " + offset + "px");
-				offset = (offset + 4) % 178; 
+				offset = (offset + 3) % 178; 
 			},100);
 			return;
 		}
+		el.val('');
 		el.css("background","");
 		clearInterval(waitingIntervalId);
 		waiting = false;
@@ -136,7 +138,7 @@ var FolderList = new (function () {
 			(function (folder){
 				el.click(function (event) {
 					log("folder '"+folder.global+"' clicked.");
-					Navigator.toggleWaiting();
+					Navigator.toggleWaiting('Fetching Mails...');
 					MailBox.getMails( [folder.global], {
 						'success' : function(mails) {
 							Navigator.toggleWaiting();
@@ -244,7 +246,7 @@ var Frontend = new (function () {
 			var mailbox = require('mailbox');
 			MailBox = new mailbox.MailBox({"endpoint": '/rpc'});
 
-			Navigator.toggleWaiting();
+			Navigator.toggleWaiting('Fetching Folders...');
 			MailBox.getFolders( [], {
 				'success' : function (folders) {
 					FolderList.setFolders(folders);
