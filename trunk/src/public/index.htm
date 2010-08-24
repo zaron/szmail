@@ -25,6 +25,10 @@ $(Frontend.start);
         <div id="wrapper">
 
             <div id="navigation">
+            	<div id="inbox_switcher">
+            		<span><img src="/images/placeholder.png" class="gmail" alt="" /><a href="#">enrico.grot@gmail.com</a></span>
+            	</div>
+            
                 <div id="inbox_navigation">
                     <ul id="special_folders">
                     	
@@ -44,12 +48,19 @@ $(Frontend.start);
             <div id="content">
                 <div id="universalbar">
                     <div id="reload_button"><a href="#"></a></div>
-                    <div id="search"><a class="bookmark" href="#"></a><a class="go" href="#"></a><div id="searchbar"><div id="suggest">
+                    <div id="compose_button"><a href="#"><img src="/images/placeholder.png" alt=""/></a><a href="#"><img src="/images/placeholder.png" alt=""/></a><a href="#"><img src="/images/placeholder.png" alt=""/></a></div>
+                    <div id="search">
+                   		<a class="bookmark" href="#"></a>
+                   		<a class="go" href="#"></a>
+                    	<div id="searchbar">
+                    		<div id="suggest">
                                 <ul>
                                     <li class="search_mails"><a>Nachrichten mit diesem Absender suchen<br/><span class="subject">Von: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
                                     <li class="new_mail"><a>Neue Nachricht verfassen<br/><span class="subject">An: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
                                 </ul>
-                            </div><input id="searchbox" autocomplete="off" type="text" name="search" /></div></div>
+                            </div><input id="searchbox" autocomplete="off" type="text" name="search" />
+						</div>
+					</div>
                 </div>
                 
                 <!--<div id="notifications">
