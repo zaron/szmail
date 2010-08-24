@@ -352,6 +352,30 @@ span.button
  Inbox Navigation
 *****************/
 
+div#inbox_switcher {
+	margin: 4px 0 10px 0;
+	height: 17px;
+	width: 177px;
+	padding: 3px 3px 3px 6px;
+	border: 1px solid #BBCDE3;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+div#inbox_switcher a {
+	padding: 0 0 0 20px;
+	display: block;
+	line-height: 18px;
+}
+
+div#inbox_switcher img.gmail {
+	float: left;
+	height: 16px;
+	width: 16px;
+	background: url(../images/gmail.png) no-repeat;
+}
+
 div#inbox_navigation {
     width: 180px;
     padding: 3px;
@@ -663,12 +687,46 @@ div#folders li a.edit_folder
     width: 23px;
     height: 23px;
 }
+
+
+#compose_button
+{
+	margin-left: 5px;
+    float: left;
+    display: inline-block;
+    background: url(../images/universalbar_bg.png) repeat-x;
+    height: 23px;
+    line-height: 21px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px #BBCDE3;
+}
+
+#compose_button a
+{
+    background: url(../images/compose.png) 4px 4px no-repeat;
+    display: inline-block;
+    height: 23px;
+    width: 23px;
+    padding: 0 2px 0 0;
+    border-right: 1px solid #ccc;
+}
+
+#compose_button a img
+{
+	margin: 3px 5px 3px 5px;
+	float: left;
+	height: 16px;
+	width: 16px;
+	background-image: url(../images/new_mail.png);
+    background-repeat: no-repeat;
+}
+
+
 #search
 {
+	margin-left: 140px;
     height: 23px;
-    position: absolute;
-    left: 30px;
-    right: 0px;
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: solid 1px #BBCDE3;
@@ -758,7 +816,6 @@ div#folders li a.edit_folder
     background: url(../images/control-power.png) 2px 2px no-repeat;
 }
 
-
 .noborder
 {
     border: 0;
@@ -772,7 +829,7 @@ div#folders li a.edit_folder
 {
     display:none;
     position: absolute;
-    left: 23px;
+    left: 163px;
     right: 23px;
     z-index: 0;
     border: 1px solid #BBCDE3;

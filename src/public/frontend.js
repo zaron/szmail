@@ -43,25 +43,36 @@ var Navigator = new (function () {
 	
 	this.getPath = function () {
 		var hash = location.hash;
-		if(!hash.match(/^#!\/.+\?/)) return; // TODO: error handling
-		var path = new String((/^#!\/.+\?/).exec(hash));
+		// Hash does not begin with #!/
+		if(!hash.match(/^#!\/.+/)) return "/INBOX"; // TODO: error handling
+		var path = new String((/^#!\/.+/).exec(hash));
 		path = path.substr(2);
 		return path.substr(0,path.length-2);
 	};
 	
+	this.getActiveFolder = function () {
+		// TODO: trim correct...
+		return this.getPath().substr(1);
+	};
+	
 	this.getParam = function(param) {
 		var hash = location.hash;
-		if(hash.indexOf('?') == hash.length) return; // TODO: error handling
-		var path = this.getPath();
+		var index = hash.indexOf('?');
+		if(index == hash.length) return; // TODO: error handling
+		var params = this.getPath().substr(index);
 		
 	};
 	
 	this.update = function () {
 		var path = this.getPath();
+		if (lastPath == undefined) {
+			FolderList.update();
+			return;
+		}
 		if(lastPath == path) return;
 		lastPath = path;
 		
-		FolderList.update(path);
+		FolderList.update();
 	};
 	
 	var waiting = false;
@@ -70,6 +81,7 @@ var Navigator = new (function () {
 	this.toggleWaiting = function(msg) {
 		var el = $('#searchbox');
 		if(!waiting) {
+			$('#content_wrapper').hide();
 			el.val(msg);
 			el.css("background","url(/images/indeterminate.png)");
 			waiting = true;
@@ -79,6 +91,7 @@ var Navigator = new (function () {
 			},100);
 			return;
 		}
+		$('#content_wrapper').show();
 		el.val('');
 		el.css("background","");
 		clearInterval(waitingIntervalId);
@@ -91,7 +104,7 @@ var Navigator = new (function () {
 			activeView = view;
 			activeView.show();
 		}
-	}
+	};
 
 	
 })();
@@ -103,14 +116,14 @@ var MailboxCache = new (function () {
 })();
 
 var FolderList = new (function () {
-	var activeFolder = null;
+	var lastActiveFolder = 'INBOX';
 	var map = {};
 	
 	/**
 	 * 
 	 */
 	this.setFolders = function (folders) {
-		log("setFolders called.");
+		log("FolderList.setFolders called.");
 		var specialFolderNames = {
 				'INBOX'  : "Posteingang",
 				'DRAFTS' : "Entwürfe",
@@ -131,23 +144,9 @@ var FolderList = new (function () {
 			var folder = folders[id];
 		
 			var el = $('<li><img src="/images/placeholder.png"' + ((folder.type) ? ' class="' + folder.type.toLowerCase() + '"':'') + ' alt="" /><a href="#!/' + folder.global + '/?">' + ((folder.type) ? specialFolderNames[folder.type] : folder.name) + ((folder.unread > 0) ? ' ('+ folder.unread + ')' : '') + '<span class="small">'+ folder.mails +'</span></a><span><a class="edit"></a><a class="delete"></a></span></li>');
-			log('map['+folder.global+'] added');
-			map["/" + folder.global] = el;
+			log('  map['+folder.global+'] added');
+			map[folder.global] = el;
 		
-			// Click-function for folders
-			(function (folder){
-				el.click(function (event) {
-					log("folder '"+folder.global+"' clicked.");
-					Navigator.toggleWaiting('Fetching Mails...');
-					MailBox.getMails( [folder.global], {
-						'success' : function(mails) {
-							Navigator.toggleWaiting();
-							InboxView.setMails(mails);
-						},
-						'error' : function(error) {}
-					});
-				});
-			})(folder);
 			// Ordering of special folders.
 			if (folder.type) {
 				specialFolders[folder.type] = el;
@@ -165,14 +164,23 @@ var FolderList = new (function () {
 		}
 	};
 
-	this.update = function (path) {
-		if (activeFolder && activeFolder != path) {
-			map[activeFolder].removeClass('active');
+	this.update = function () {
+		var activeFolder = Navigator.getActiveFolder();
+		if (map[activeFolder]) {
+			map[lastActiveFolder].removeClass('active');
+			lastActiveFolder = activeFolder;
 			Navigator.setActiveView($('#view_folders'));
+			Navigator.toggleWaiting('Fetching Mails...');
+			MailBox.getMails( [activeFolder], {
+				'success' : function(mails) {
+					Navigator.toggleWaiting();
+					InboxView.setMails(mails);
+				},
+				'error' : function(error) {}
+			});
 		}
-		activeFolder = path;
 		map[activeFolder].addClass('active');
-		log('InboxNavigation updated.');
+		log('FolderList updated.');
 	};
 	
 })();
@@ -194,19 +202,19 @@ var InboxView = new (function () {
 					 + '</i></a></b></td><td class="from"><a class="">'
 					 + mail.from
 					 + '</a></td><td class="date">'
-					 + mail.date
+					 + mail.date // TODO: SimpleDate
 					 + '</td><td class="size">'
 					 + mail.size
 					 + '</td></tr>');
 			map[mail.uid] = el;
 			el.click(function(event) {
-				log("mail clicked.");
 				Navigator.setActiveView($('#view_mail'));				
 			});
 			el.appendTo($('#mail_table tbody'));
 		}
 	};
 })();
+
 
 var MailView = new (function () {
 	var I18n = {
@@ -260,7 +268,6 @@ var Frontend = new (function () {
 		$(window).bind('hashchange', function(event) {
 			log('hashchange event fired.');
 			Navigator.update();
-			
 		});
 		
 		$('.content').hide();
