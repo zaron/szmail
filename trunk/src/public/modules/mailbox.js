@@ -146,6 +146,23 @@ var MailBox = MailBox || function(options) {
 		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});
 	};
 	
+	/**
+	 * 
+	 * 
+	 * @param events
+	 * @returns
+	 */
+	this.getMail = function(args, events) {
+		net.createJSONRPCRequest(function(request){
+			request.setMethod("getMail");
+			request.write(args);
+			request.on("success", function(response) {
+				events.success(response.result);
+			});
+			request.on("error", events.error || noop);
+		}).send(options.endpoint, {method : net.HTTP_METHOD_POST});
+	};
+	
 	
 	this.getConfiguration = function(events) {
 		net.createHTTPRequest(function(request){
