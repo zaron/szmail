@@ -44,15 +44,15 @@ var Navigator = new (function () {
 	this.getPath = function () {
 		var hash = location.hash;
 		// Hash does not begin with #!/
-		if(!hash.match(/^#!\/.+/)) return "/INBOX"; // TODO: error handling
-		var path = new String((/^#!\/.+/).exec(hash));
-		path = path.substr(2);
+		if(!hash.match(/^#!\/.+\?/)) return "INBOX"; // TODO: error handling
+		var path = new String((/^#!\/.+\?/).exec(hash));
+		path = path.substr(3);
 		return path.substr(0,path.length-2);
 	};
 	
 	this.getActiveFolder = function () {
 		// TODO: trim correct...
-		return this.getPath().substr(1);
+		return this.getPath();
 	};
 	
 	this.getParam = function(param) {
@@ -109,11 +109,6 @@ var Navigator = new (function () {
 	
 })();
 
-var MailboxCache = new (function () {
-	this.hasMail = function (folder,uid) {
-		
-	};
-})();
 
 var FolderList = new (function () {
 	var lastActiveFolder = 'INBOX';
@@ -191,13 +186,13 @@ var InboxView = new (function () {
 		$('#mail_table tbody').html('');
 		for(var id in mails) {
 			var mail = mails[id];
-			
+			(function (mail) {
 			//var el = document.createElement('tr');
 			
 			var el = $('<tr><td class="checkbox"><div class="checkbox">'
 					 + '<input type="checkbox" name="" /></div></td>'
 					 + '<td class="attachment"><a class="'+((mail.attachments != null)?'':'no')+'attachment">'
-					 + '</a></td><td class="subject"><b><a href="#!'+Navigator.getPath()+'?m='+ mail.id +'"><i>'
+					 + '</a></td><td class="subject"><b><a href="#!/'+Navigator.getPath()+'/?m='+ mail.uid +'"><i>'
 					 + mail.subject
 					 + '</i></a></b></td><td class="from"><a class="">'
 					 + mail.from
@@ -206,11 +201,23 @@ var InboxView = new (function () {
 					 + '</td><td class="size">'
 					 + mail.size
 					 + '</td></tr>');
+			
 			map[mail.uid] = el;
 			el.click(function(event) {
-				Navigator.setActiveView($('#view_mail'));				
+				Navigator.toggleWaiting('Fetching Mail...');
+				MailBox.getMail( [mail.uid], {
+					'success' : function (mail) {
+						Navigator.toggleWaiting();
+						Navigator.setActiveView($('#view_mail'));
+						MailView.update(mail);
+					},
+					'error' : function (error) {}
+				});
+				
 			});
+			
 			el.appendTo($('#mail_table tbody'));
+			})(mail);
 		}
 	};
 })();
@@ -220,8 +227,8 @@ var MailView = new (function () {
 	var I18n = {
 		'views' : {
 			'mail' : {
-				'sent' : 'Sent:',
-				'from' : 'From:',
+				'sent' : 'Empf&auml;nger:',
+				'from' : 'Absender:',
 				'to' : 'To:',
 				'cc' : 'CC:',
 				'bcc' : 'BCC:'
@@ -229,15 +236,28 @@ var MailView = new (function () {
 		}
 	};
 	
-	var el = $('#view_mail_information');
-	var tpl = '<p class="received"><span class="header"><%= I18n.views.mail.sent %></span><span><%= mail.date %></span></p>'
-	        + '<p class="from"><span class="header"><%= I18n.views.mail.from %></span><span class="user_male"><%= mail.from.name %></span></p>'
-	        + '<p class="to"><span class="header"><%= I18n.views.mail.to %></span><% _.each(mail.to, function(person) { %><span class="user_male"><%= person.name %></span><% } %></p>'
-	        + '<p class="cc"><span class="header"><%= I18n.views.mail.cc %></span><% _.each(mail.cc, function(person) { %><span class="user_male"><%= person.name %></span><% } %></p>'
-	        + '<p class="bcc"><span class="header"><%= I18n.views.mail.bcc %></span><% _.each(mail.bcc, function(person) { %><span class="user_male"><%= person.name %></span><% } %></p>';
 	
 	this.update = function (mail) {
-		el.html(_.template(tpl, {I18n : I18n, mail: mail}));
+		var el = $('#view_mail_information');
+		var tpl = $('<p class="received"><span class="header">' + I18n.views.mail.sent + '</span><span>' + mail.date + '</span></p>'
+		        + '<p class="from"><span class="header">' + I18n.views.mail.from + '</span><span class="user_male">' + mail.from + '</span></p>'
+		        + '<p class="to"><span class="header">' + I18n.views.mail.to + '</span>' + '</p>'
+		        + '<p class="cc"><span class="header">' + I18n.views.mail.cc + '</span>' + '</p>'
+		        + '<p class="bcc"><span class="header">' + I18n.views.mail.bcc + '</span>' + '</p>');
+		
+		//var tpl = "goo";
+		
+		el.html(tpl);
+		var el = $('<iframe frameborder="0" width="100%" height="450" />');
+		$('#view_mail .htmlview').html(el);
+		setTimeout( function() {
+			var doc = el[0].contentWindow.document;
+			var body = $('body',doc);
+			body.html(mail.html);
+		}, 1 );
+		$('#view_mail .textview').html("<pre>" + mail.text + "</pre>");
+
+		body.html(mail.text);
 	};
 	
 })();
@@ -271,6 +291,18 @@ var Frontend = new (function () {
 		});
 		
 		$('.content').hide();
+		
+		var mailhtmlview = false;
+		$('a.view_html').click(function(){
+			mailhtmlview = true;
+			$('div.htmlview').show();
+			$('div.textview').hide();
+		});
+		$('a.view_text').click(function(){
+			mailhtmlview = false;
+			$('div.htmlview').hide();
+			$('div.textview').show();
+		});
 
 		
 		// TODO: Make Universalbar object that manages this shit.
