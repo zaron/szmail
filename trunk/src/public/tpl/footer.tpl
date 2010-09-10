@@ -1,0 +1,1 @@
+<div id="footer">powered by szMail</div>
