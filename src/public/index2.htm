@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>szMail</title>
@@ -11,7 +10,7 @@
 <script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 <script type="text/javascript" src="folders.js"></script>
 <script type="text/javascript" src="mails.js"></script>
-<script type="text/javascript" src="frontend.js"></script>
+<!-- <script type="text/javascript" src="frontend.js"></script> -->
 
 <script type="text/javascript">
 function loadTemplate(id, url) {
@@ -32,7 +31,8 @@ function toDate(str)
 	return new Date(str[3], months[str[2]], str[1], daytime[0], daytime[1], daytime[2]);
 }
 
-function convenienceDate(date){
+function convenienceDate(str){
+	var date = toDate(str);
 	return date.toDateString();
 }
 
@@ -54,9 +54,27 @@ $(function () {
 	loadTemplate('header','tpl/header.tpl');
 	loadTemplate('layout','tpl/layout.tpl');
 	
+	loadTemplate('login_form','tpl/login/form.tpl');
 	
 	
 	
+	$.tmpl('layout').prependTo('body');
+	
+	$.tmpl('login_form').prependTo('#wrapper');
+	
+	showContent();
+	
+	$(document).click(function(){
+		$('#main').toggleClass('login');
+		$('#navigation, #content').toggleClass('visible');
+	});
+});
+
+
+function showContent()
+{
+	$.tmpl('folderview').appendTo('#content_wrapper');
+
 	$(".dropdown dt").click(function() {
 		$(".dropdown dt").css("-moz-border-radius","3px 3px 0 0");
 	    $(".dropdown dd ul").toggle();
@@ -72,17 +90,7 @@ $(function () {
             
     });
 
-	//$('#special_folders').render(folders,directive);
-	//$('#folders').render(folders,directive);
-	//var el = tpl;
-	
-	$.tmpl('layout',{}).prependTo('body');
-	
-	$.tmpl('universalbar',{}).prependTo('#content');
-	
-	
-	$.tmpl('folderview',{}).appendTo('#content_wrapper');
-	
+    
 	var folders_ = $('#folders');
 	$.each(folders.folders, function(index, folder) {
 		$.tmpl('folderlist_item', folder).appendTo(folders_);
@@ -92,9 +100,8 @@ $(function () {
 	var tbody = $('tbody');
 	$.each(mails.mails, function(index, mail) {
 		$.tmpl('folderview_item' ,mail).appendTo(tbody);
-	});
-	
-});
+	});	
+};
 </script>
 </head>
 <body></body>
