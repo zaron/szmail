@@ -1,3 +1,5 @@
+<div id="main">
+
 {{tmpl 'header'}}
 
 <div id="wrapper">
@@ -13,3 +15,5 @@
 </div>
 
 {{tmpl 'footer'}}
+
+</div>
