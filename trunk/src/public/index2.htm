@@ -56,18 +56,19 @@ $(function () {
 	
 	loadTemplate('login_form','tpl/login/form.tpl');
 	
-	
+	loadTemplate('settingsview','tpl/settings/settings.tpl');
 	
 	$.tmpl('layout').prependTo('body');
 	
 	$.tmpl('login_form').prependTo('#wrapper');
+
+	$.tmpl('settingsview').appendTo('#content_wrapper');
+	//showContent();
 	
-	showContent();
-	
-	$(document).click(function(){
-		$('#main').toggleClass('login');
-		$('#navigation, #content').toggleClass('visible');
-	});
+	//$(document).click(function(){
+	//	$('#main').toggleClass('login');
+	//	$('#navigation, #content').toggleClass('visible');
+	//});
 });
 
 
