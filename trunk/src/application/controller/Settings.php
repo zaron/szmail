@@ -24,7 +24,6 @@ class Controller_Settings {
 	 * 
 	 * @param array $key
 	 * @param array $value
-	 *
 	 */
 	public function setValue($key, $value) {
 		SZ_Setting_Manager::setValue($key,$value);	
@@ -39,6 +38,10 @@ class Controller_Settings {
 		return SZ_Setting_Manager::getValue($key);
 	}
 	
+	/**
+	 * 
+	 * @param array $key
+	 */
 	public function deleteValue($key) {
 		SZ_Setting_Manager::deleteValue($key);	
 	}
