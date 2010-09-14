@@ -107,6 +107,6 @@ class Controller_Mail {
 		}
 
 		private function getMailbox() {
-			return new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig(1));;
+			return new SZ_Mail_Manager_Imap(SZ_Setting_Manager::getMainImapConfig());;
 		}
 }

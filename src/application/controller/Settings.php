@@ -20,41 +20,27 @@
 
 class Controller_Settings {
 
-	public function setValue($key, $value, $groupId = null) {
-		
-	}
-	
-	public function getValue($key, $groupId = null) {
-		
-	}
-	
-	public function deleteValue($key, $groupId = null) {
-		
+	/**
+	 * 
+	 * @param array $key
+	 * @param array $value
+	 *
+	 */
+	public function setValue($key, $value) {
+		SZ_Setting_Manager::setValue($key,$value);	
 	}
 	
 	/**
 	 * 
-	 * @param unknown_type $groupKey
-	 * @param unknown_type $number
+	 * @param array $key
+	 * @return array
 	 */
-	public function getGroup($groupKey, $number = -1) {
-		
+	public function getValue($key) {
+		return SZ_Setting_Manager::getValue($key);
 	}
 	
-	/**
-	 * 
-	 * @param unknown_type $groupKey
-	 * @param unknown_type $number
-	 * @param unknown_type $groupId if set, it's a move
-	 */
-	public function setGroup($groupKey, $number = null, $groupId = null) {
-		
+	public function deleteValue($key) {
+		SZ_Setting_Manager::deleteValue($key);	
 	}
-	
-	public function deleteGroup($groupId) {
-		
-	}
-	
-	
 	
 }

@@ -20,6 +20,67 @@
 
 class SZ_Setting_Manager {
 
+	public function getValue($key) {
+		$userId = SZ_Session_Manager::getSession()->userId;
+		self::validateKeys($key);
+		
+		$db = Zend_Registry::get('db');
+		$select = new Zend_Db_Select($db);
+		
+		$select->from('keyvaluestore')->where('user_id = ?',$userId)->where("szkey = ?",$key)->limit(1);
+		$qry = $select->query()->fetch();
+		
+		if($qry == false) {
+			throw new SZ_Exception("Key not found.");
+		}
+		
+		return array($qry['szkey'] => $qry['szvalue']);
+	}
+	
+	public function setValue($key,$value) {
+		$userId = SZ_Session_Manager::getSession()->userId;
+		self::validateKeyAndValues($key,$value);
+		
+		$db = Zend_Registry::get('db');
+		
+		// find nicer solution like INSERT . ON DUPLICATE KEY UPDATE
+		$qry = $db->delete('keyvaluestore',array('user_id = ?' => $userId, 'szkey = ?' => $key));
+		$qry = $db->insert('keyvaluestore',array('user_id' => $userId, 'szkey' => $key, 'szvalue' => $value));
+		
+		if($qry == false) {
+			throw new SZ_Exception("Insert failed.");
+		}
+	}
+	
+	public function deleteValue($key) {
+		$userId = SZ_Session_Manager::getSession()->userId;
+		self::validateKeys($key);
+		
+		$db = Zend_Registry::get('db');
+		
+		$qry = $db->delete('keyvaluestore',array('user_id = ?' => $userId, 'szkey = ?' => $key));
+		
+		if($qry == false) {
+			throw new SZ_Exception("Insert failed.");
+		}
+	}
+	
+	private function validateKeys($key) {
+		
+	}
+	
+	private function validateKeyAndValues($key,$value) {
+		
+	}
+	
+	//todo
+	private function createWhere($keys) {
+		foreach($keys as $key) {
+			$result = " key = ".$key." OR ";
+		}
+		return "(".substr($result,0,strlen($result)-4).")";
+	}
+	
 	public function getMainImapConfig($userId = null) {
 		if($userId === null) {
 			$session = SZ_Session_Manager::getSession();
