@@ -19,5 +19,42 @@
  */
 
 class Controller_Settings {
+
+	public function setValue($key, $value, $groupId = null) {
+		
+	}
+	
+	public function getValue($key, $groupId = null) {
+		
+	}
+	
+	public function deleteValue($key, $groupId = null) {
+		
+	}
+	
+	/**
+	 * 
+	 * @param unknown_type $groupKey
+	 * @param unknown_type $number
+	 */
+	public function getGroup($groupKey, $number = -1) {
+		
+	}
+	
+	/**
+	 * 
+	 * @param unknown_type $groupKey
+	 * @param unknown_type $number
+	 * @param unknown_type $groupId if set, it's a move
+	 */
+	public function setGroup($groupKey, $number = null, $groupId = null) {
+		
+	}
+	
+	public function deleteGroup($groupId) {
+		
+	}
+	
+	
 	
 }
