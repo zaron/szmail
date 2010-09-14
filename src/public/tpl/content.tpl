@@ -3,7 +3,7 @@
 <!-- begin: content -->
 			<div id="content">
 
-<!-- Universalbar -->
+				{{tmpl 'universalbar'}}
                 
                 <!--<div id="notifications">
                     <div class="notification"><p class="ok">Everythings fine.</p></div>
