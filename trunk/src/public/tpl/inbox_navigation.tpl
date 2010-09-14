@@ -1,4 +1,4 @@
-<div id="inbox_navigation">
+<div class="navigation" id="inbox_navigation">
 	<ul id="special_folders">
 	
 		<li class="n separator"></li>

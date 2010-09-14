@@ -14,7 +14,7 @@
 
 
 <div class="form menu right">
-	<div class="button signin withText"><a href="#"><img src="/images/placeholder.png" alt=""/>Sign In</a></div>
+	<div class="button signin withText"><a><img src="/images/placeholder.png" alt=""/>Sign In</a></div>
 </div>
 </fieldset>
 </form>
