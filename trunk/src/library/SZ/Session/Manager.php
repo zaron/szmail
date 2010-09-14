@@ -40,6 +40,14 @@ class SZ_Session_Manager {
 	}
 
 	public function getSession() {
+		//dev
+		$data = new Zend_Session_Namespace('userdata');
+		$data->userId = 1;
+		$data->username = "test";
+		$data->password = "test";
+		return $data;
+		
+		
 		if(self::$session === null) {
 			$session = self::initSession();
 			if(!isset($session->userId)) {

@@ -40,6 +40,7 @@ class Bootstrap extends Zend_Application_Bootstrap_BootstrapAbstract
 	private function addClasses(Zend_Json_Server $server){
 		$server->setClass('Controller_Test');
 		$server->setClass('Controller_Mail');
+		$server->setClass('Controller_Settings');
 	}
 
 	private function preDispatch(Zend_Json_Server $server) {

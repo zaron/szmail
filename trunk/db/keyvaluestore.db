@@ -1,0 +1,8 @@
+CREATE TABLE `szmail`.`keyvaluestore` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`user_id` INT NOT NULL ,
+`szkey` VARCHAR( 256 ) NOT NULL ,
+`szvalue` TEXT NULL ,
+INDEX ( `szkey` ),
+UNIQUE (`user_id`,`szkey`)
+) ENGINE = MYISAM;
