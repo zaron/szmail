@@ -10,7 +10,9 @@
 <script type="text/javascript" src="lib/jquery.tmpl.js"></script>
 <script type="text/javascript" src="folders.js"></script>
 <script type="text/javascript" src="mails.js"></script>
-<!-- <script type="text/javascript" src="frontend.js"></script> -->
+
+
+<script type="text/javascript" src="navigator.js"></script>
 
 <script type="text/javascript">
 function loadTemplate(id, url) {
@@ -37,6 +39,10 @@ function convenienceDate(str){
 }
 
 $(function () {
+	
+	$(window).bind('hashchange', function(event) {
+		Navigator.update();
+	});
 
 	loadTemplate('folderview_item','tpl/_folderview_item.tpl');
 	loadTemplate('folderlist_item','tpl/_folderlist_item.tpl');
@@ -57,18 +63,25 @@ $(function () {
 	loadTemplate('login_form','tpl/login/form.tpl');
 	
 	loadTemplate('settingsview','tpl/settings/settings.tpl');
+	loadTemplate('settings_navigation','tpl/settings/navigation.tpl');
+	
+	loadTemplate('settings_account','tpl/settings/account.tpl');
+	loadTemplate('settings_server_in','tpl/settings/server_in.tpl');
+	loadTemplate('settings_server_out','tpl/settings/server_out.tpl');
+	loadTemplate('_settings_item','tpl/settings/_settings_item.tpl');
 	
 	$.tmpl('layout').prependTo('body');
 	
-	$.tmpl('login_form').prependTo('#wrapper');
+	//$.tmpl('login_form').prependTo('#wrapper');
 
 	$.tmpl('settingsview').appendTo('#content_wrapper');
 	//showContent();
 	
 	//$(document).click(function(){
-	//	$('#main').toggleClass('login');
-	//	$('#navigation, #content').toggleClass('visible');
+		//$('#main').toggleClass('login');
+		$('#inbox_navigation').toggleClass('hidden');
 	//});
+
 });
 
 
