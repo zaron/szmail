@@ -1,11 +1,15 @@
+html {
+	height: 100%;
+}
+
 html,body * {
 	margin: 0;
 	padding: 0;
 }
 
 body {
-	background: url(../images/background_gradient.png) repeat-x #6EA0DE;
-	height: 100%;
+	/*background: url(../images/background_gradient.png) repeat-x #6EA0DE;*/
+	background: -moz-element(#bg-gradient);
 	padding: 0 13px 0 13px;
 	position: relative;
 }
@@ -125,7 +129,7 @@ div#wrapper {
 	padding: 13px;
 }
 
-div#navigation {
+div#aside {
 	float: left;
 	width: 200px;
 	border-right: 1px solid #ddd;
@@ -134,7 +138,7 @@ div#navigation {
 	-khtml-user-select: none;
 }
 
-div#navigation a:active,div#navigation a:focus {
+div#aside a:active,div#aside a:focus {
 	outline: 0;
 }
 
@@ -224,6 +228,7 @@ table {
 	vertical-align: top;
     height: 23px;
     background: url(../images/universalbar_bg.png) repeat-x;
+    background: -moz-element(#button-gradient);
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: solid 1px #BBCDE3;
@@ -338,6 +343,7 @@ ul.breadcrumbs {
     border-radius: 3px;
     border: solid 1px #ddd;
     background: url(../images/universalbar_bg.png) repeat-x;
+    background: -moz-element(#button-gradient);
     margin: 0 0 8px 0;
 }
 
@@ -499,39 +505,41 @@ div#inbox_navigation ul#folders li.active img {
 
 *********/
 
-#settings_navigation ul li.account2 {
-	height: 130px;
-}
-
-#settings_navigation ul li.account2 img {
-	background-image: url(../images/inbox.png);
-}
-
-#settings_navigation ul li.add img {
-	background-image: url(../images/inbox--plus.png);
-}
-
-#settings_navigation ul li.account2 ul {
-	padding-left: 7px;
-}
-
-#settings_navigation ul li.setting.account {
+.settings.nav {
+	position: relative;
 	height: 23px;
 }
 
-#settings_navigation ul li.settings.server_out img {
+.settings .wrapper {
+	position: absolute;	
+}
+
+.settings ul li {
+	padding-right: 8px;
+}
+
+.settings ul li:first-child {
+	padding-left: 13px;
+}
+
+.settings ul li.active {
+	background-color: #fff;
+	-moz-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;	
+	border-color: #BBCDE3 #BBCDE3 #FFF #BBCDE3;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.settings ul li.servers img {
 	background-image: url(../images/server.png);
 }
 
-#settings_navigation ul li.settings.server_in img {
-	background-image: url(../images/server.png);
-}
-
-#settings_navigation ul li.settings.folders img {
+.settings ul li.folders img {
 	background-image: url(../images/folders.png);
 }
 
-#settings_navigation ul li.settings.account img {
+.settings ul li.account img {
 	background-image: url(../images/user-silhouette.png);
 }
 
@@ -830,6 +838,7 @@ div#inbox_switcher .dropdown dt
 	padding: 3px;
 	border: 1px solid #BBCDE3;
 	background: url(../images/universalbar_bg.png) repeat-x;
+	background: -moz-element(#button-gradient-active);
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
