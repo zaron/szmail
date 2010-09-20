@@ -15,107 +15,102 @@
 <script type="text/javascript" src="navigator.js"></script>
 
 <script type="text/javascript">
-function loadTemplate(id, url) {
+function loadTemplate (id, url) {
+	// TODO: store which templates are already loaded and compiled then decide about loading.
 	var data = $.ajax({ type: "GET", url: url, async: false }).responseText;
-	$.template(id, data);
-}
+	return $.template(id, data);
+};
 
-function getTemplate(id) {
-	$.template(id);
-}
+var templates = {};
+function insertTemplateSet(set) {
+	for (var id in set.templates) {
+		if(templates[set.templates[id]]) continue;
+		templates[set.templates[id]] = loadTemplate(set.templates[id],'tpl/' + set.templates[id] + '.tpl');
+	};
+	set.insert(templates[set.templates[0]]);
+};
 
-function toDate(str)
-{
-	var months = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12};
-	// Wed, 10 Mar 2010 22:55:11 +0100
-	var str = str.split(' ');
-	var daytime = str[4].split(':');
-	return new Date(str[3], months[str[2]], str[1], daytime[0], daytime[1], daytime[2]);
-}
+function View (options) {
+	var loaded = false;
+	var anchor = null;
+	var placeholders = {};
+	
+	this.show = function () {
+		if(loaded) {
+			anchor.show();
 
-function convenienceDate(str){
-	var date = toDate(str);
-	return date.toDateString();
-}
+		} else {
+			insertTemplateSet({
+				templates : options.templates,
+				insert    : function (tmpl) {
+					anchor = options.insert(tmpl);
+					anchor.hide();
+					anchor.show('slow');
+					loaded = true;
+				}
+			});
+		}
+		for(var id in placeholders) {
+			placeholders[id].show();
+		}
+	};
+	
+	this.hide = function () {
+		if(!loaded) {
+			alert('View not loaded yet!');
+			return;
+		}
+		anchor.hide('slow');
+	};
+	
+	this.setPlaceholder = function (name, placeholder) {
+		if(placeholders[name] && placeholders[name] != placeholder) placeholders[name].hide();
+		placeholders[name] = placeholder;
+	};
+};
+
+var TwoColumnsPerspective = new View({
+	templates : ['base/layout','base/header','base/aside','base/content','base/footer','base/universalbar','base/accounts'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('body'));
+	}
+});
+
+
+var SettingsSidebar = new View({
+	templates : ['settings/sidebar'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#aside'))
+	}
+});
+
+var MailboxSidebar = new View({
+	templates : ['mail/sidebar'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#aside'))
+	}
+});
+
+
+
 
 $(function () {
 	
 	$(window).bind('hashchange', function(event) {
-		Navigator.update();
+		//Navigator.update();
 	});
 
-	loadTemplate('folderview_item','tpl/_folderview_item.tpl');
-	loadTemplate('folderlist_item','tpl/_folderlist_item.tpl');
-	
-	loadTemplate('folderview','tpl/folderview.tpl');
-	loadTemplate('breadcrumbs','tpl/breadcrumbs.tpl');
-	loadTemplate('inbox_switcher','tpl/inbox_switcher.tpl');
-	loadTemplate('inbox_navigation','tpl/inbox_navigation.tpl');
-	loadTemplate('sidebar','tpl/sidebar.tpl');
-	loadTemplate('content','tpl/content.tpl');
-	
-	loadTemplate('universalbar','tpl/universalbar.tpl');
-	
-	loadTemplate('footer','tpl/footer.tpl');
-	loadTemplate('header','tpl/header.tpl');
-	loadTemplate('layout','tpl/layout.tpl');
-	
-	loadTemplate('login_form','tpl/login/form.tpl');
-	
-	loadTemplate('settingsview','tpl/settings/settings.tpl');
-	loadTemplate('settings_navigation','tpl/settings/navigation.tpl');
-	
-	loadTemplate('settings_account','tpl/settings/account.tpl');
-	loadTemplate('settings_server_in','tpl/settings/server_in.tpl');
-	loadTemplate('settings_server_out','tpl/settings/server_out.tpl');
-	loadTemplate('_settings_item','tpl/settings/_settings_item.tpl');
-	
-	$.tmpl('layout').prependTo('body');
-	
-	//$.tmpl('login_form').prependTo('#wrapper');
+	TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebar);
+	TwoColumnsPerspective.show();
 
-	$.tmpl('settingsview').appendTo('#content_wrapper');
-	//showContent();
+	$(window).click(function () {
+		TwoColumnsPerspective.setPlaceholder('aside',MailboxSidebar);
+		TwoColumnsPerspective.show();
+	});
 	
-	//$(document).click(function(){
-		//$('#main').toggleClass('login');
-		$('#inbox_navigation').toggleClass('hidden');
-	//});
-
 });
 
 
-function showContent()
-{
-	$.tmpl('folderview').appendTo('#content_wrapper');
-
-	$(".dropdown dt").click(function() {
-		$(".dropdown dt").css("-moz-border-radius","3px 3px 0 0");
-	    $(".dropdown dd ul").toggle();
-	});
-	
-    $(document).bind('click', function(e) {
-        var $clicked = $(e.target);
-        if (! $clicked.parents().hasClass("dropdown"))
-        {
-        	$(".dropdown dt").css("-moz-border-radius","3px");
-        	$(".dropdown dd ul").hide();
-        }
-            
-    });
-
-    
-	var folders_ = $('#folders');
-	$.each(folders.folders, function(index, folder) {
-		$.tmpl('folderlist_item', folder).appendTo(folders_);
-	});
-	
-	
-	var tbody = $('tbody');
-	$.each(mails.mails, function(index, mail) {
-		$.tmpl('folderview_item' ,mail).appendTo(tbody);
-	});	
-};
 </script>
 </head>
 <body></body>

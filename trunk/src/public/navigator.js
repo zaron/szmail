@@ -1,6 +1,6 @@
 var Navigator = new (function () {
 	var params;
-	
+	var views = {};
 	
 	var changeView = function (view) {
 		
@@ -13,6 +13,14 @@ var Navigator = new (function () {
 		var path = new String((/^#!\/.+\?/).exec(hash));
 		path = path.substr(3);
 		return path.substr(0,path.length-2);
+	};
+	
+	this.getViewURL = function (view) {
+		
+	};
+	
+	this.registerView = function (view) {
+		views[view.name] = view;
 	};
 	
 	/**
@@ -34,22 +42,12 @@ var Navigator = new (function () {
 		ex = ex.slice(2, ex.length);
 		for (var i in ex) {
 			var kv = ex[i].split('=');
-			params[kv[0]] = kv[1]; 
+			params[kv[0]] = kv[1];
 		}
 		
-		if (params['v'] == "settings_account") {
-			$('#settings_account').show();
-			$('#settings_server_in').hide();
-			$('#settings_server_out').hide();
-		} else if (params['v'] == "settings_server_in") {
-			$('#settings_account').hide();
-			$('#settings_server_in').show();
-			$('#settings_server_out').hide();
-		} else if (params['v'] == "settings_server_out") {
-			$('#settings_account').hide();
-			$('#settings_server_in').hide();
-			$('#settings_server_out').show();
-		}
+		// Select view and show it. 
+		if(views[params['v']])
+			views[params['v']].show();
 	};
 
 })();

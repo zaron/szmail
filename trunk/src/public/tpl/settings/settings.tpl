@@ -1,10 +1,11 @@
-<div>
+<div class="settings nav">
+	<div class="wrapper">
 	<ul class="tabs">
-		<li><a href="#!//?v=settings_account"><img src="/images/placeholder.png" alt="" />Identit&auml;t</a></li>
-		<li><a href="#!//?v=settings_server_in"><img src="/images/placeholder.png" alt="" />Eingangs-Server</a></li>
-		<li><a href="#!//?v=settings_server_out"><img src="/images/placeholder.png" alt="" />Ausgangs-Server</a></li>
-		<li><a href="#!//?v=settings_folders"><img src="/images/placeholder.png" alt="" />Standard-Ordner</a></li>
+		<li class="account"><a href="#!//?v=settings_account"><img src="/images/placeholder.png" alt="" />Identit&auml;t</a></li>
+		<li class="servers active"><a href="#!//?v=settings_server_in"><img src="/images/placeholder.png" alt="" />Server</a></li>
+		<li class="folders"><a href="#!//?v=settings_folders"><img src="/images/placeholder.png" alt="" />Standard-Ordner</a></li>
 	</ul>
+	</div>
 </div>
 <div class="content settings">
 
