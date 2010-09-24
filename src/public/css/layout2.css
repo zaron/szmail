@@ -222,6 +222,9 @@ table {
  Buttons
 ********/
 .button {
+	transition: all 0.5s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
 	text-align: left;
 	display: inline-block;
 	white-space: nowrap;
@@ -234,7 +237,8 @@ table {
     border: solid 1px #BBCDE3;
 }
 
-.button:hover{border-color:#5D88BC;}
+.button:hover{
+	border-color:#5D88BC;}
 .button a {
 	width: 100%;
 	line-height:21px;
@@ -542,12 +546,21 @@ div#inbox_navigation ul#folders li.active img {
 .settings ul li.account img {
 	background-image: url(../images/user-silhouette.png);
 }
+.navigation ul li.contacts img {
+	background-image: url(../images/users.png);
+}
+.navigation ul li.themes img {
+	background-image: url(../images/palette.png);
+}
 
+.navigation ul li.outboxes img {
+	background-image: url(../images/server--arrow.png);
+}
 
-.settings .button.save {
+.settings .button.save img{
 	background: url(../images/tick.png) 4px 4px no-repeat;
 }
-.settings .button.cancel {
+.settings .button.cancel img{
 	background: url(../images/cross.png) 5px 4px no-repeat;
 }
 
@@ -825,9 +838,10 @@ div#inbox_switcher img
 	padding: 0 4px 0 0;
 	margin: 0 0 0 3px;
 }
-div#inbox_switcher img.gmail{background: url(../images/gmail.png) no-repeat;}
-div#inbox_switcher img.gmx{background: url(../images/gmx.png) no-repeat;}
-div#inbox_switcher img.all{background: url(../images/inbox_full.png) no-repeat;}
+div#inbox_switcher .gmail img{background: url(../images/gmail.png) no-repeat;}
+div#inbox_switcher .gmx img{background: url(../images/gmx.png) no-repeat;}
+div#inbox_switcher .all img{background: url(../images/inbox_full.png) no-repeat;}
+div#inbox_switcher .settings img{background: url(../images/gear.png) no-repeat;}
 
 div#inbox_switcher .dropdown dt
 {
@@ -838,7 +852,7 @@ div#inbox_switcher .dropdown dt
 	padding: 3px;
 	border: 1px solid #BBCDE3;
 	background: url(../images/universalbar_bg.png) repeat-x;
-	background: -moz-element(#button-gradient-active);
+	background: -moz-element(#button-gradient);
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
