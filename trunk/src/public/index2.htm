@@ -45,7 +45,7 @@ function View (options) {
 				insert    : function (tmpl) {
 					anchor = options.insert(tmpl);
 					anchor.hide();
-					anchor.show('slow');
+					anchor.show();
 					loaded = true;
 				}
 			});
@@ -57,10 +57,10 @@ function View (options) {
 	
 	this.hide = function () {
 		if(!loaded) {
-			alert('View not loaded yet!');
+			alert('View not loaded yet!?');
 			return;
 		}
-		anchor.hide('slow');
+		anchor.hide();
 	};
 	
 	this.setPlaceholder = function (name, placeholder) {
@@ -69,44 +69,114 @@ function View (options) {
 	};
 };
 
+/* Perspectives */
 var TwoColumnsPerspective = new View({
 	templates : ['base/layout','base/header','base/aside','base/content','base/footer','base/universalbar','base/accounts'],
 	insert    : function (tmpl) {
-		return $.tmpl(tmpl).appendTo($('body'));
+		var anchor = $.tmpl(tmpl).appendTo($('body')) 
+		$(".dropdown dt").click(function() {
+			$(".dropdown dt").css("-moz-border-radius","3px 3px 0 0");
+		    $(".dropdown dd ul").toggle();
+		});
+		return anchor;
 	}
 });
 
-
-var SettingsSidebar = new View({
+/* Views */
+var SettingsSidebarView = new View({
 	templates : ['settings/sidebar'],
 	insert    : function (tmpl) {
 		return $.tmpl(tmpl).appendTo($('#aside'))
 	}
 });
 
-var MailboxSidebar = new View({
+var MailboxSidebarView = new View({
 	templates : ['mail/sidebar'],
 	insert    : function (tmpl) {
 		return $.tmpl(tmpl).appendTo($('#aside'))
 	}
 });
 
+var MailboxView = new View({
+	templates : ['mail/folder/content'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#content'))
+	}
+});
+
+var SettingsAccountView = new View({
+	templates : ['settings/account/content'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#content'))
+	}
+});
+
+var SettingsAccountIdentityView = new View({
+	templates : ['settings/account/identity'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#account div.content'))
+	}
+});
+
+var SettingsAccountServersView = new View({
+	templates : ['settings/account/servers'],
+	insert    : function (tmpl) {
+		return $.tmpl(tmpl).appendTo($('#account div.content'))
+	}
+});
+
+var EmptyView = {
+	show : function(){},
+	hide : function(){}
+};
+
+/* Pages */
+var SettingsPage = {
+	name : 'settings',
+	show : function() {
+		TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebarView);
+		SettingsAccountView.setPlaceholder('content',EmptyView);
+		TwoColumnsPerspective.setPlaceholder('content',SettingsAccountView);
+		TwoColumnsPerspective.show();
+		$('div.settings.nav').hide();
+	}
+};
+
+var MailboxPage = {
+		name : 'mailbox',
+		show : function() {
+			TwoColumnsPerspective.setPlaceholder('aside',MailboxSidebarView);
+			MailboxView.setPlaceholder('content',EmptyView);
+			TwoColumnsPerspective.setPlaceholder('content',MailboxView);
+			TwoColumnsPerspective.show();
+			$('div.settings.nav').hide();
+		}
+	};
+
+var SettingsAccountPage = {
+	name : 'settings/account',
+	show : function() {
+		TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebarView);
+		SettingsAccountView.setPlaceholder('content',SettingsAccountIdentityView);	
+		TwoColumnsPerspective.setPlaceholder('content',SettingsAccountView);
+		TwoColumnsPerspective.show();
+		$('div.settings.nav').show();
+	}
+};
 
 
 
 $(function () {
 	
+	Navigator.registerPage(SettingsPage);
+	Navigator.registerPage(SettingsAccountPage);
+	Navigator.registerPage(MailboxPage);
+	
 	$(window).bind('hashchange', function(event) {
-		//Navigator.update();
+		Navigator.update();
 	});
 
-	TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebar);
-	TwoColumnsPerspective.show();
-
-	$(window).click(function () {
-		TwoColumnsPerspective.setPlaceholder('aside',MailboxSidebar);
-		TwoColumnsPerspective.show();
-	});
+	$(window).trigger('hashchange');
 	
 });
 
