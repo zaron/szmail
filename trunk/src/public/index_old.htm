@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>szMail</title>
+<link rel="stylesheet" href="css/layout.css" />
+
+<script type="text/javascript" src="lib/yabble.js"></script>
+<script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="frontend.js"></script>
+
+<script type="text/javascript"> 
+$(Frontend.start);
+</script>
+</head>
+<body>
+
+<div id="debug"></div>
+      <div id="header">
+            <div id="logo"><h1><a>szMail</a></h1>
+            	<div id="headerbar">Willkommen, <a href="">Eric Barmeyer</a> | <a href="">Accounteinstellungen</a> | <a href="" class="logout">Abmelden</a></div>
+            </div>
+        </div>
+        <div id="wrapper">
+
+            <div id="navigation">
+            	<div id="inbox_switcher">
+            		<span><img src="/images/placeholder.png" class="gmail" alt="" /><a href="#">enrico.grot@gmail.com</a></span>
+            	</div>
+            
+                <div id="inbox_navigation">
+                    <ul id="special_folders">
+                    	
+                        <li class="n separator"></li>
+                    </ul>
+
+                    <h3>Ordner</h3>
+                    <ul id="folders">
+						
+                        <li class="n separator"></li>
+                        <li class="n"><img src="/images/placeholder.png" class="add_folder" alt="" /><a>Ordner hinzuf&uuml;gen</a></li>
+                        <li class="n"><img src="/images/placeholder.png" class="edit_folder" alt="" /><a>Ordner verwalten</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="content">
+                <div id="universalbar">
+                    <div id="reload_button"><a href="#"></a></div>
+                    <div id="compose_button"><a href="#"><img src="/images/placeholder.png" alt=""/></a><a href="#"><img src="/images/placeholder.png" alt=""/></a><a href="#"><img src="/images/placeholder.png" alt=""/></a></div>
+                    <div id="search">
+                   		<a class="bookmark" href="#"></a>
+                   		<a class="go" href="#"></a>
+                    	<div id="searchbar">
+                    		<div id="suggest">
+                                <ul>
+                                    <li class="search_mails"><a>Nachrichten mit diesem Absender suchen<br/><span class="subject">Von: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                    <li class="new_mail"><a>Neue Nachricht verfassen<br/><span class="subject">An: <span class="email">eric.barmeyer@rwth-aachen.de</span></span></a></li>
+                                </ul>
+                            </div><input id="searchbox" autocomplete="off" type="text" name="search" />
+						</div>
+					</div>
+                </div>
+                
+                <!--<div id="notifications">
+                    <div class="notification"><p class="ok">Everythings fine.</p></div>
+                    <div class="notification"><p class="warning">Quota is at 89%.</p></div>
+                </div>-->
+                
+                
+                <div id="content_wrapper" class="content_wrapper">
+
+<!-- view mail -->
+
+<div class="content" id="view_mail">
+    <h2>Betreff der eMail</h2>
+    <div class="panel">
+		<div class="right"><div class="jqPlot" id="history_plot" style="height:89px; width:366px;"></div>
+	    </div>
+	    <div id="view_mail_information" class="information left">
+	        <p class="received"><span class="header">Sent: </span><span>Name des Absenders</span></p>
+	        <p class="from"><span class="header">From: </span><span class="user_male">eMail-Adresse@des.Absenders</span></p>
+	        <p class="to"><span class="header">To: </span><span class="user_male">eMail-Adresse@der.Empfaenger</span></p>
+	        <p class="cc"><span class="header">CC: </span>eMail-Adresse@der.Empfaenger</p>
+	        <p class="bcc"><span class="header">BCC: </span>eMail-Adresse@der.Empfaenger</p>
+	    </div>
+    </div>
+    <div class="menu">
+        <div class="left"><span class="button"><a class="reply" href="#">Antworten</a></span><span class="button"><a class="reply_all" href="#">Allen Antworten</a></span><span class="button"><a class="forward" href="#">Weiterleiten</a></span></div>
+        <div class="right"><span class="button"><a class="mail_history" href="#">Verlauf</a></span><span class="button"><a class="add_note" href="#">Notiz hinzuf&uuml;gen</a></span></div>
+    </div>
+    <div class="mail_content">
+    	<div class="view_switcher"><div><span class="button left"><a class="view_text">Text</a></span><span class="button right"><a class="view_html active">HTML</a></span></div></div>
+        <div class="htmlview"></div>
+        <div class="textview"></div>
+    </div>
+</div>
+
+<!-- end: view mail -->
+
+<!--  view folders -->
+
+<div class="content" id="view_folders">
+<div class="menu noborder">
+<div class="left">Inbox</div>
+<div class="right pagination"></div>
+</div>
+<table id="mail_table" cellspacing="0">
+
+	<thead>
+		<tr>
+			<th scope="col" class="checkbox"><img
+				src="/images/ui-check-boxes.png" alt="" /></th>
+			<th scope="col" class="attachment"><img
+				src="/images/paper-clip.png" alt="" /><a class="order"></a></th>
+			<th scope="col" class="subject">Betreff<a class="order"></a></th>
+			<th scope="col" class="from">Absender<a class="order"></a></th>
+			<th scope="col" class="date">Datum<a class="order"></a></th>
+			<th scope="col" class="size">Gr&ouml;&szlig;e<a class="order"></a></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	</tbody>
+
+</table>
+
+<div class="menu noborder">
+<div class="left"></div>
+<div class="right pagination"></div>
+</div>
+</div>
+
+<!-- end: view folders -->
+
+
+</div>
+            </div>
+			<div class="clear"></div>
+        </div>
+        <div id="footer">powered by szMail</div>
+</body>
+
+</html>
