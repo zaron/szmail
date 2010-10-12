@@ -134,7 +134,7 @@ MailboxView.setFolders = function (folders) {
 	
 	for (var id in specialFolders) {
 		var folder = specialFolders[id];
-		$.tmpl('mail/folder/_folderlist_item',folder).appendTo($('#special_folders'));
+		$.tmpl('mail/folder/_folderlist_item',folder).insertBefore('#special_folders .n.separator');
 	}
 	
 	for (var id in folders) {
