@@ -2,7 +2,7 @@
 
 	<div class="menu noborder">
 		<div class="left">
-			{{tmpl 'breadcrumbs'}}
+			{{tmpl 'widgets/breadcrumbs'}}
 		</div>
 		<div class="right pagination"><a>Nachrichten 1 - 20 von 1234</a></div>
 	</div>

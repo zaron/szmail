@@ -2,16 +2,22 @@ html {
 	height: 100%;
 }
 
-html,body * {
+html, body, body * {
 	margin: 0;
 	padding: 0;
 }
 
 body {
-	/*background: url(../images/background_gradient.png) repeat-x #6EA0DE;*/
-	background: -moz-element(#bg-gradient);
-	padding: 0 13px 0 13px;
+	background: #6EA0DE;
 	position: relative;
+	margin: 0 13px 0 13px;
+}
+
+#gradient {
+	margin: 0 -13px 0 -13px;
+	height: 59px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#A2CCEE), to(#6EA0DE));
+	background: -moz-linear-gradient(top, #A2CCEE, #6EA0DE);
 }
 
 a:hover {
@@ -32,7 +38,7 @@ display:none;
 #main {
 	height: 100%;
 	position:absolute;
-    min-width: 960px;
+    min-width: 934px;
     width: 100%;
     left:0;
     top:0;
@@ -218,6 +224,8 @@ table {
 	background: url(../images/control-power.png) no-repeat 5px 4px;
 }
 
+
+
 /********
  Buttons
 ********/
@@ -231,7 +239,8 @@ table {
 	vertical-align: top;
     height: 23px;
     background: url(../images/universalbar_bg.png) repeat-x;
-    background: -moz-element(#button-gradient);
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#C7E1FF));
+	background: -moz-linear-gradient(top, #FFFFFF, #C7E1FF);
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: solid 1px #BBCDE3;
@@ -347,7 +356,8 @@ ul.breadcrumbs {
     border-radius: 3px;
     border: solid 1px #ddd;
     background: url(../images/universalbar_bg.png) repeat-x;
-    background: -moz-element(#button-gradient);
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#C7E1FF));
+	background: -moz-linear-gradient(top, #FFFFFF, #C7E1FF);
     margin: 0 0 8px 0;
 }
 
@@ -852,7 +862,8 @@ div#inbox_switcher .dropdown dt
 	padding: 3px;
 	border: 1px solid #BBCDE3;
 	background: url(../images/universalbar_bg.png) repeat-x;
-	background: -moz-element(#button-gradient);
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#C7E1FF));
+	background: -moz-linear-gradient(top, #FFFFFF, #C7E1FF);
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
