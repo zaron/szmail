@@ -173,6 +173,7 @@ var EmptyView = {
 /* Pages */
 var SettingsPage = {
 	name : 'settings',
+	url  : '',
 	show : function() {
 		TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebarView);
 		SettingsAccountView.setPlaceholder('content',EmptyView);
@@ -184,6 +185,7 @@ var SettingsPage = {
 
 var MailboxPage = {
 	name : 'mailbox',
+	url  : '#!mailbox:/?',
 	show : function() {
 		TwoColumnsPerspective.setPlaceholder('aside',MailboxSidebarView);
 		MailboxView.setPlaceholder('content',EmptyView);
@@ -196,6 +198,7 @@ var MailboxPage = {
 
 var SettingsAccountPage = {
 	name : 'settings/account',
+	url  : '',
 	show : function() {
 		TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebarView);
 		SettingsAccountView.setPlaceholder('content',SettingsAccountIdentityView);	
@@ -207,6 +210,7 @@ var SettingsAccountPage = {
 
 var SettingsServerPage = {
 	name : 'settings/server',
+	url  : '',
 	show : function() {
 		TwoColumnsPerspective.setPlaceholder('aside',SettingsSidebarView);
 		SettingsAccountView.setPlaceholder('content',SettingsAccountIdentityView);	
@@ -226,7 +230,7 @@ function startup() {
 		// register pages.
 		Navigator.registerPage(SettingsPage);
 		Navigator.registerPage(SettingsAccountPage);
-		Navigator.registerPage(MailboxPage);
+		Navigator.registerPage(MailboxPage, true);
 		
 		// register onhashchange event handler.
 		$(window).bind('hashchange', function(event) {

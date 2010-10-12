@@ -1,6 +1,7 @@
 var Navigator = new (function () {
 	var params;
 	var pages = {};
+	var defaultPage;
 	
 	var changeView = function (view) {
 		
@@ -19,10 +20,11 @@ var Navigator = new (function () {
 		
 	};
 	
-	this.registerPage = function (page) {
+	this.registerPage = function (page, isDefault) {
 		pages[page.name] = page;
+		if(isDefault) defaultPage = page;
 	};
-	
+
 	/**
 	 * 
 	 * @param parameter
@@ -35,7 +37,11 @@ var Navigator = new (function () {
 		var hash = location.hash;
 		var regex = /^#!([a-z]+):\/(.*)\?(.*)/;
 		var matches = hash.match(regex);
-		if (!matches) return; // TODO: error handling!
+		if (!matches) {
+			// TODO: error handling!
+			location.hash = defaultPage.url;
+			return;
+		}; 
 		
 		if (matches[1] == 'mailbox') {
 			var selectedFolder = matches[2];
@@ -49,8 +55,11 @@ var Navigator = new (function () {
 		
 		// Select page and show it. 
 		var page = matches[1] + ((matches[2] != '') ? '/' + matches[2] : '');
-		if(pages[page]) pages[page].show();
-		pages[defaultPage].show();
+		if (pages[page]) {
+			pages[page].show();
+		} else {
+			location.hash = defaultPage.url;
+		}
 	};
 
 })();
