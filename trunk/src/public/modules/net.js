@@ -9,6 +9,7 @@ exports.JSONRPC_VERSION_2 = '2.0';
 // Empty function.
 var noop = function() {};
 
+
 function createXMLHttpRequest() {
 	try {
 		return new XMLHttpRequest();
